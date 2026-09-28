@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estação 3 · O Grito na Taça | Descobrir Hz & Medir Voz</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: linear-gradient(145deg, #0b0e14 0%, #1a1f2c 100%);
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      color: #eef4ff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1.5rem 3rem;
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 400;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #fff, #aac8ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.3rem;
+      text-align: center;
+      filter: drop-shadow(0 0 15px rgba(80, 140, 255, 0.4));
+    }
+
+    .subhead {
+      font-size: 1.1rem;
+      color: #8fa3c7;
+      margin-bottom: 2.5rem;
+      text-align: center;
+      border-bottom: 1px solid #2e3c54;
+      padding-bottom: 1rem;
+      max-width: 700px;
+      letter-spacing: 1px;
+    }
+
+    .glass-panel {
+      background: rgba(18, 26, 40, 0.75);
+      backdrop-filter: blur(10px);
+      border: 1px solid #334155;
+      border-radius: 2.5rem;
+      padding: 2rem 1.8rem;
+      box-shadow: 0 25px 40px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(120, 170, 255, 0.1) inset;
+      width: 100%;
+      max-width: 1300px;
+    }
+
+    /* ===== ABAS ===== */
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.8rem;
+      background: #0a121e;
+      padding: 0.4rem;
+      border-radius: 3rem;
+      border: 1px solid #26334a;
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      border-radius: 3rem;
+      padding: 0.9rem 1rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #7d96bb;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .tab-btn:hover {
+      color: #c6dcff;
+    }
+
+    .tab-btn.active {
+      background: #1d2b42;
+      color: #fff;
+      border: 1px solid #4a6a9a;
+      box-shadow: 0 0 20px rgba(100, 216, 255, 0.15);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .main-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.8rem;
+      justify-content: center;
+    }
+
+    .control-column {
+      flex: 1.2;
+      min-width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+    }
+
+    .visual-column {
+      flex: 2;
+      min-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .card {
+      background: #0d1420;
+      border-radius: 1.8rem;
+      border: 1px solid #26334a;
+      padding: 1.5rem 1.5rem;
+      box-shadow: 0 12px 22px -8px #00000080;
+    }
+
+    .card-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #6b8ac9;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .hz-display {
+      background: #0a121e;
+      border: 2px solid #2f4a70;
+      border-radius: 1.5rem;
+      padding: 1.2rem 1rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hz-display::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #64d8ff, transparent);
+      animation: scanline 2s linear infinite;
+    }
+
+    @keyframes scanline {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .hz-value {
+      font-size: 4rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -2px;
+      line-height: 1;
+      color: #64d8ff;
+      text-shadow: 0 0 30px rgba(100, 216, 255, 0.6), 0 0 60px rgba(100, 216, 255, 0.3);
+      transition: color 0.2s, text-shadow 0.2s;
+    }
+
+    .hz-value.found {
+      color: #ffb86b;
+      text-shadow: 0 0 30px rgba(255, 184, 107, 0.8), 0 0 60px rgba(255, 184, 107, 0.5);
+    }
+
+    .hz-value.matching {
+      color: #50fa7b;
+      text-shadow: 0 0 30px rgba(80, 250, 123, 0.8), 0 0 60px rgba(80, 250, 123, 0.5);
+    }
+
+    .hz-value.silent {
+      color: #3a4a60;
+      text-shadow: none;
+    }
+
+    .hz-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: #5a7196;
+      margin-top: 0.5rem;
+    }
+
+    .level-meter {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 1rem;
+    }
+
+    .level-bar-bg {
+      flex: 1;
+      height: 8px;
+      background: #1a2435;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .level-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #64d8ff, #50fa7b);
+      border-radius: 10px;
+    }
+
+    .level-label {
+      font-size: 0.7rem;
+      color: #5a7196;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .match-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1rem;
+      background: #101a28;
+      padding: 0.8rem 1.2rem;
+      border-radius: 3rem;
+      border: 1px solid #2f405e;
+    }
+
+    .match-light {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #3a4a60;
+      transition: background 0.15s, box-shadow 0.15s;
+    }
+
+    .match-light.active {
+      background: #50fa7b;
+      box-shadow: 0 0 20px #50fa7b, 0 0 8px #fff;
+    }
+
+    .match-light.listening {
+      background: #ffb86b;
+      box-shadow: 0 0 20px #ffb86b, 0 0 8px #fff;
+      animation: pulse 0.6s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { opacity: 0.6; }
+      to { opacity: 1; }
+    }
+
+    .status-text {
+      color: #8ca9e0;
+      font-size: 0.9rem;
+    }
+
+    .btn {
+      background: #1d2b42;
+      border: none;
+      border-radius: 3rem;
+      padding: 1rem 1.5rem;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #c6dcff;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: 1px solid #3f5680;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7rem;
+      width: 100%;
+      font-family: inherit;
+    }
+
+    .btn:hover {
+      background: #253a5a;
+      color: #fff;
+      border-color: #7aa5ff;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid #31486b;
+      color: #95aed6;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.4rem;
+    }
+
+    .canvas-wrapper {
+      background: #0a0f18;
+      border-radius: 1.5rem;
+      padding: 0.2rem;
+      border: 1px solid #1e2c42;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 1.4rem;
+      background: #0a0f18;
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 2.2rem;
+      margin-top: 0.6rem;
+      font-size: 0.85rem;
+      color: #7d96bb;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .legend-color {
+      width: 18px;
+      height: 5px;
+      border-radius: 4px;
+    }
+
+    .legend-color.target { background: #ffb86b; }
+    .legend-color.mic { background: #64d8ff; }
+    .legend-color.spec { background: #50fa7b; }
+    .legend-color.beat { background: #ff6b9d; }
+
+    .mic-permission-note {
+      font-size: 0.75rem;
+      color: #5a7196;
+      margin-top: 0.6rem;
+      text-align: center;
+      min-height: 1.2em;
+    }
+
+    .force-enable {
+      background: #30202a;
+      border-color: #9f5b6b;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 8px;
+      -webkit-appearance: none;
+      background: linear-gradient(90deg, #2a3a5a, #5070b0);
+      border-radius: 20px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px;
+      height: 24px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 15px #7aa5ff;
+      border: 2px solid #aac8ff;
+    }
+
+    input[type="range"]:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .note-box {
+      background: #0f1c2e;
+      border: 1px solid #2a4060;
+      border-radius: 1rem;
+      padding: 0.8rem 1rem;
+      font-size: 0.8rem;
+      color: #7d96bb;
+      line-height: 1.5;
+      margin-top: 1rem;
+    }
+
+    .note-box strong { color: #aac8ff; }
+
+    .peak-list {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .peak-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0.9rem;
+      background: #101a28;
+      border-radius: 0.8rem;
+      border: 1px solid #263a56;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      gap: 0.5rem;
+    }
+
+    .peak-item:hover {
+      background: #16253b;
+      border-color: #4a6a9a;
+      transform: translateX(3px);
+    }
+
+    .peak-item .freq {
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: #ffb86b;
+      font-size: 1.1rem;
+      min-width: 90px;
+    }
+
+    .peak-item .db {
+      color: #7d96bb;
+      font-size: 0.8rem;
+      min-width: 50px;
+    }
+
+    .peak-item .use-btn {
+      background: #2a3d5c;
+      border: 1px solid #4a6a9a;
+      color: #aac8ff;
+      border-radius: 1rem;
+      padding: 0.25rem 0.7rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .peak-item .use-btn:hover {
+      background: #3a557a;
+      color: #fff;
+    }
+
+    .target-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .target-freq-big {
+      font-size: 2.2rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: #ffb86b;
+      text-shadow: 0 0 20px rgba(255, 184, 107, 0.5);
+    }
+
+    .target-input {
+      width: 120px;
+      background: #101a28;
+      border: 1px solid #2f405e;
+      border-radius: 0.8rem;
+      padding: 0.6rem;
+      color: #ffb86b;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-align: center;
+      font-family: inherit;
+    }
+
+    .target-input:focus {
+      outline: none;
+      border-color: #ffb86b;
+      box-shadow: 0 0 15px rgba(255, 184, 107, 0.3);
+    }
+
+    /* Voice range display */
+    .voice-range {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.8rem;
+      font-size: 0.75rem;
+      color: #5a7196;
+    }
+
+    .voice-marker {
+      position: relative;
+      height: 30px;
+      background: linear-gradient(90deg, 
+        #4a2a5a 0%, #2a4a5a 25%, #2a5a4a 50%, #5a4a2a 75%, #5a2a2a 100%);
+      border-radius: 1rem;
+      margin-top: 0.8rem;
+      overflow: hidden;
+      border: 1px solid #263a56;
+    }
+
+    .voice-marker-indicator {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: #fff;
+      box-shadow: 0 0 15px #fff, 0 0 30px #64d8ff;
+      transition: left 0.1s ease-out;
+      left: 0%;
+    }
+
+    .voice-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.3rem;
+      font-size: 0.7rem;
+      color: #5a7196;
+    }
+
+    .sociology-section {
+      margin-top: 3rem;
+      background: #0a111d;
+      border-radius: 2rem;
+      padding: 2rem;
+      border: 1px solid #1e2e48;
+      max-width: 1300px;
+      width: 100%;
+    }
+
+    .sociology-section h2 {
+      font-weight: 400;
+      font-size: 1.6rem;
+      letter-spacing: 2px;
+      color: #aac3ee;
+      margin-bottom: 1.5rem;
+      border-left: 5px solid #5b7ec7;
+      padding-left: 1.2rem;
+    }
+
+    .sociology-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: space-between;
+    }
+
+    .socio-card {
+      flex: 1 1 220px;
+      background: #101b2b;
+      border-radius: 1.8rem;
+      padding: 1.6rem 1.5rem;
+      border: 1px solid #263b5c;
+    }
+
+    .socio-card h3 {
+      color: #8bb2ff;
+      font-weight: 500;
+      font-size: 1.2rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .socio-card p {
+      font-size: 0.94rem;
+      line-height: 1.6;
+      color: #b4c7e5;
+    }
+
+    footer {
+      margin-top: 2.8rem;
+      font-size: 0.8rem;
+      color: #3e5270;
+      text-align: center;
+      border-top: 1px solid #1e2b3e;
+      padding-top: 1.8rem;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <h1>⚡ O GRITO NA TAÇA ⚡</h1>
+  <div class="subhead">Descobrir Hz da Taça · Medir Hz da Voz · Ressonância</div>
+
+  <div class="glass-panel">
+    <!-- ABAS -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="glass">
+        🍷 Descobrir Hz da Taça
+      </button>
+      <button class="tab-btn" data-tab="voice">
+        🎤 Medir Hz da Voz
+      </button>
+    </div>
+
+    <!-- ===== ABA 1: DESCOBRIR Hz DA TAÇA ===== -->
+    <div class="tab-content active" id="tab-glass">
+      <div class="main-grid">
+        <div class="control-column">
+          <div class="card">
+            <div class="card-title">🔬 ANÁLISE ESPECTRAL DA TAÇA</div>
+
+            <div class="hz-display">
+              <div class="hz-value silent" id="glassHzValue">---</div>
+              <div class="hz-label">FREQUÊNCIA DA TAÇA DETECTADA</div>
+            </div>
+
+            <div class="level-meter">
+              <span class="level-label">NÍVEL</span>
+              <div class="level-bar-bg"><div class="level-bar-fill" id="glassLevelBar"></div></div>
+            </div>
+
+            <div class="match-indicator">
+              <div class="match-light" id="glassMatchLight"></div>
+              <div class="status-text" id="glassStatusText">Ative o microfone e toque na taça</div>
+            </div>
+
+            <div class="btn-row" style="margin-top: 1.2rem;">
+              <button class="btn btn-secondary" id="glassClearBtn">↺ Limpar</button>
+              <button class="btn" id="glassMicBtn">🎤 Ativar microfone</button>
+            </div>
+            <div class="mic-permission-note" id="glassMicStatus">Toque na taça após ativar o microfone</div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">📊 PICOS ESPECTRAIS DETECTADOS</div>
+            <div class="note-box" style="margin-top: 0;">
+              <strong>💡 Como usar:</strong> Toque na borda da taça com uma colher ou unha. O sistema captura o pico dominante. Clique em "Usar como alvo" para aplicar esse Hz ao teste de ressonância.
+            </div>
+            <div class="peak-list" id="glassPeakList">
+              <div style="color:#5a7196; font-size:0.85rem; text-align:center; padding: 1rem 0;">
+                Nenhum pico detectado ainda...
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="visual-column">
+          <div class="canvas-wrapper">
+            <canvas id="glassCanvas" width="1000" height="400"></canvas>
+          </div>
+          <div class="legend">
+            <div class="legend-item"><div class="legend-color mic"></div> Forma de onda (tempo)</div>
+            <div class="legend-item"><div class="legend-color spec"></div> Espectro (frequência)</div>
+            <div class="legend-item"><div class="legend-color target"></div> Pico dominante</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ABA 2: MEDIR Hz DA VOZ ===== -->
+    <div class="tab-content" id="tab-voice">
+      <div class="main-grid">
+        <div class="control-column">
+          <div class="card">
+            <div class="card-title">🎤 MEDIDOR DE FREQUÊNCIA DA VOZ</div>
+
+            <div class="hz-display">
+              <div class="hz-value silent" id="voiceHzValue">---</div>
+              <div class="hz-label">FREQUÊNCIA DA SUA VOZ</div>
+            </div>
+
+            <!-- Marcador de faixa vocal -->
+            <div class="voice-marker">
+              <div class="voice-marker-indicator" id="voiceMarker"></div>
+            </div>
+            <div class="voice-labels">
+              <span>80 Hz</span>
+              <span>255 Hz</span>
+              <span>500 Hz</span>
+              <span>1000 Hz</span>
+              <span>2000 Hz</span>
+            </div>
+
+            <div class="level-meter">
+              <span class="level-label">NÍVEL</span>
+              <div class="level-bar-bg"><div class="level-bar-fill" id="voiceLevelBar"></div></div>
+            </div>
+
+            <div class="match-indicator">
+              <div class="match-light" id="voiceMatchLight"></div>
+              <div class="status-text" id="voiceStatusText">Ative o microfone e fale/cante</div>
+            </div>
+
+            <div class="btn-row" style="margin-top: 1.2rem;">
+              <button class="btn btn-secondary" id="voiceResetBtn">↺ Reiniciar</button>
+              <button class="btn" id="voiceMicBtn">🎤 Ativar microfone</button>
+            </div>
+            <div class="mic-permission-note" id="voiceMicStatus">Faça um som constante (ex: "aaa")</div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">🎯 FREQUÊNCIA ALVO DA TAÇA</div>
+            <div class="target-row">
+              <span class="target-freq-big" id="voiceTargetDisplay">850</span>
+              <span style="color: #7d96bb;">Hz</span>
+              <input type="number" class="target-input" id="voiceTargetInput" min="100" max="2000" value="850">
+              <button class="btn" id="voiceApplyTargetBtn" style="width: auto; padding: 0.6rem 1.2rem;">Aplicar</button>
+            </div>
+            <div class="note-box">
+              <strong>💡 Desafio:</strong> Ajuste sua voz para coincidir com a frequência alvo da taça. Quando as duas ondas se alinharem, a amplitude de ressonância atinge o máximo!
+            </div>
+
+            <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.6rem;">
+              <div style="display: flex; align-items: center; gap: 1rem;">
+                <span style="font-size: 1.5rem;">🍷</span>
+                <span id="voiceCrackMessage" style="color: #aac8ff; font-size: 0.9rem;">A taça está intacta…</span>
+              </div>
+              <div style="background: #0b111c; border-radius: 20px; height: 12px; width: 100%; overflow: hidden;">
+                <div id="voiceEnergyBar" style="height: 100%; width: 0%; background: linear-gradient(90deg, #ffb86b, #ff4d6d);"></div>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #7d96bb;">
+                <span>Energia de ressonância</span>
+                <span id="voiceAmplitudeReading" style="font-weight: 700; color: #ffb86b;">0%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="visual-column">
+          <div class="canvas-wrapper">
+            <canvas id="voiceCanvas" width="1000" height="400"></canvas>
+          </div>
+          <div class="legend">
+            <div class="legend-item"><div class="legend-color target"></div> Onda alvo (taça)</div>
+            <div class="legend-item"><div class="legend-color mic"></div> Sua voz</div>
+            <div class="legend-item"><div class="legend-color beat"></div> Batimento / Ressonância</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sociology-section">
+    <h2>📈 Ondas trigonométricas & a Sociedade</h2>
+    <div class="sociology-grid">
+      <div class="socio-card">
+        <h3>〰️ Ciclos de Kondratiev</h3>
+        <p>Ondas longas de 40–60 anos: prosperidade, recessão, depressão e reanimação. A economia oscila como um seno.</p>
+      </div>
+      <div class="socio-card">
+        <h3>⚖️ Pêndulo político</h3>
+        <p>Entre conservadorismo e progressismo, as sociedades balançam de um extremo a outro.</p>
+      </div>
+      <div class="socio-card">
+        <h3>👗 Moda & tendências</h3>
+        <p>Estéticas são cíclicas: sobem, saturam, caem e décadas depois retornam como "vintage".</p>
+      </div>
+      <div class="socio-card">
+        <h3>👶 Ondas demográficas</h3>
+        <p>Baby boomers e crises geram variações regulares nas taxas de natalidade.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Estação 3 · O Grito na Taça — Descobrir Hz da Taça + Medir Hz da Voz
+  </footer>
+
+  <script>
+    // ============================================================
+    // VARIÁVEIS GLOBAIS
+    // ============================================================
+    var TARGET_FREQ = 850;
+    var SILENCE_RMS = 0.008;
+    var SMOOTHING = 0.7;
+
+    // Estado do microfone (compartilhado)
+    var audioContext = null;
+    var analyser = null;
+    var microphone = null;
+    var stream = null;
+    var isMicActive = false;
+    var animationFrameId = null;
+
+    // Modo atual: 'glass' ou 'voice'
+    var currentMode = 'glass';
+
+    // Buffers
+    var freqData = null;
+    var timeData = null;
+
+    // Detecção de picos
+    var detectedPeaks = [];
+    var lastPeakTime = 0;
+    var peakCooldown = 400;
+
+    // Estado de cada modo
+    var glassState = {
+      detectedHz: 0,
+      smoothedHz: 0,
+      cracked: false
+    };
+
+    var voiceState = {
+      detectedHz: 0,
+      smoothedHz: 0,
+      cracked: false
+    };
+
+    // ============================================================
+    // DOM
+    // ============================================================
+    var tabBtns, tabContents;
+    var glassCanvas, glassCtx, glassHzValue, glassLevelBar, glassMatchLight,
+        glassStatusText, glassMicBtn, glassClearBtn, glassMicStatus, glassPeakList;
+    var voiceCanvas, voiceCtx, voiceHzValue, voiceLevelBar, voiceMatchLight,
+        voiceStatusText, voiceMicBtn, voiceResetBtn, voiceMicStatus,
+        voiceMarker, voiceTargetDisplay, voiceTargetInput, voiceApplyTargetBtn,
+        voiceCrackMessage, voiceEnergyBar, voiceAmplitudeReading;
+
+    // ============================================================
+    // UTILITÁRIOS
+    // ============================================================
+    function computeEnergyFromFreq(freq, target) {
+      if (freq <= 0 || target <= 0) return 0;
+      var diff = Math.abs(freq - target);
+      var maxDiff = 200;
+      var energy = Math.max(0, 1 - (diff / maxDiff));
+      return Math.pow(energy, 1.5);
+    }
+
+    // Frequência -> posição na barra vocal (80 Hz a 2000 Hz, escala log)
+    function freqToMarkerPercent(freq) {
+      if (freq <= 0) return 0;
+      var minF = 80, maxF = 2000;
+      var logMin = Math.log10(minF);
+      var logMax = Math.log10(maxF);
+      var logF = Math.log10(Math.max(minF, Math.min(maxF, freq)));
+      return ((logF - logMin) / (logMax - logMin)) * 100;
+    }
+
+    // ============================================================
+    // MICROFONE COMPARTILHADO
+    // ============================================================
+    function startMicrophone() {
+      if (isMicActive) return;
+
+      navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: false,
+          noiseSuppression: false,
+          autoGainControl: false
+        }
+      })
+      .then(function(s) {
+        stream = s;
+
+        var AC = window.AudioContext || window.webkitAudioContext;
+        audioContext = new AC();
+
+        var resumePromise = audioContext.state === 'suspended'
+          ? audioContext.resume()
+          : Promise.resolve();
+
+        resumePromise.then(function() {
+          analyser = audioContext.createAnalyser();
+          analyser.fftSize = 16384;
+          analyser.smoothingTimeConstant = 0.3;
+
+          freqData = new Uint8Array(analyser.frequencyBinCount);
+          timeData = new Float32Array(analyser.fftSize);
+
+          microphone = audioContext.createMediaStreamSource(stream);
+          microphone.connect(analyser);
+
+          isMicActive = true;
+          updateMicButtons();
+
+          if (animationFrameId) cancelAnimationFrame(animationFrameId);
+          analyzeLoop();
+        });
+      })
+      .catch(function(err) {
+        console.error('Erro ao acessar microfone:', err);
+        var msg = '❌ ' + (err.message || 'Microfone não disponível');
+        if (glassMicStatus) glassMicStatus.textContent = msg;
+        if (voiceMicStatus) voiceMicStatus.textContent = msg;
+        isMicActive = false;
+      });
+    }
+
+    function stopMicrophone() {
+      if (!isMicActive) return;
+
+      if (stream) {
+        stream.getTracks().forEach(function(t) { t.stop(); });
+        stream = null;
+      }
+      if (audioContext && audioContext.state !== 'closed') {
+        audioContext.close();
+      }
+      isMicActive = false;
+      audioContext = null;
+      analyser = null;
+      microphone = null;
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+      }
+      updateMicButtons();
+    }
+
+    function updateMicButtons() {
+      if (glassMicBtn) {
+        glassMicBtn.textContent = isMicActive ? '🎤 Desativar microfone' : '🎤 Ativar microfone';
+      }
+      if (voiceMicBtn) {
+        voiceMicBtn.textContent = isMicActive ? '🎤 Desativar microfone' : '🎤 Ativar microfone';
+      }
+      if (glassMicStatus) {
+        glassMicStatus.textContent = isMicActive 
+          ? '🎙️ Toque na taça e observe os Hz!' 
+          : 'Toque na taça após ativar o microfone';
+      }
+      if (voiceMicStatus) {
+        voiceMicStatus.textContent = isMicActive 
+          ? '🎙️ Faça um som constante (ex: "aaa")' 
+          : 'Faça um som constante (ex: "aaa")';
+      }
+    }
+
+    // ============================================================
+    // LOOP DE ANÁLISE
+    // ============================================================
+    function analyzeLoop() {
+      if (!isMicActive || !analyser) return;
+
+      // Tempo (RMS)
+      analyser.getFloatTimeDomainData(timeData);
+      var rms = 0;
+      for (var i = 0; i < timeData.length; i++) {
+        rms += timeData[i] * timeData[i];
+      }
+      rms = Math.sqrt(rms / timeData.length);
+
+      var levelPercent = Math.min(100, rms * 1500);
+
+      // Atualiza barra de nível do modo ativo
+      if (currentMode === 'glass' && glassLevelBar) {
+        glassLevelBar.style.width = levelPercent + '%';
+      }
+      if (currentMode === 'voice' && voiceLevelBar) {
+        voiceLevelBar.style.width = levelPercent + '%';
+      }
+
+      // Frequência
+      analyser.getByteFrequencyData(freqData);
+
+      if (currentMode === 'glass') {
+        processGlassMode(rms);
+      } else {
+        processVoiceMode(rms);
+      }
+
+      animationFrameId = requestAnimationFrame(analyzeLoop);
+    }
+
+    // ============================================================
+    // MODO 1: DESCOBRIR Hz DA TAÇA
+    // ============================================================
+    function processGlassMode(rms) {
+      var sampleRate = audioContext.sampleRate;
+      var binCount = analyser.frequencyBinCount;
+      var nyquist = sampleRate / 2;
+      var binWidth = nyquist / binCount;
+
+      // Encontra pico máximo
+      var maxVal = 0;
+      var maxBin = -1;
+      for (var i = 1; i < binCount - 1; i++) {
+        if (freqData[i] > maxVal) {
+          maxVal = freqData[i];
+          maxBin = i;
+        }
+      }
+
+      if (maxVal < 100 || maxBin < 1) {
+        if (Date.now() - lastPeakTime > 2000 && glassState.smoothedHz > 0) {
+          glassState.smoothedHz *= 0.95;
+          if (glassState.smoothedHz < 30) {
+            glassState.smoothedHz = 0;
+            if (glassHzValue) {
+              glassHzValue.textContent = '---';
+              glassHzValue.classList.add('silent');
+              glassHzValue.classList.remove('found');
+            }
+            if (glassStatusText) glassStatusText.textContent = '🎙️ Aguardando toque na taça...';
+          }
+        }
+        return;
+      }
+
+      // Interpolação parabólica
+      var y1 = freqData[maxBin - 1];
+      var y2 = freqData[maxBin];
+      var y3 = freqData[maxBin + 1];
+      var a = (y1 + y3 - 2 * y2) / 2;
+      var b = (y3 - y1) / 2;
+      var offset = 0;
+      if (a !== 0) offset = -b / (2 * a);
+      var refinedBin = maxBin + offset;
+      var peakFreq = refinedBin * binWidth;
+
+      if (peakFreq < 100 || peakFreq > 4000) return;
+
+      // Cooldown
+      var now = Date.now();
+      if (now - lastPeakTime < peakCooldown) return;
+
+      // Verifica se já existe pico próximo
+      var found = false;
+      for (var j = 0; j < detectedPeaks.length; j++) {
+        if (Math.abs(detectedPeaks[j].freq - peakFreq) < 5) {
+          if (maxVal > detectedPeaks[j].mag) {
+            detectedPeaks[j].mag = maxVal;
+            detectedPeaks[j].time = now;
+            renderGlassPeakList();
+          }
+          found = true;
+          break;
+        }
+      }
+
+      if (!found) {
+        detectedPeaks.push({
+          freq: peakFreq,
+          mag: maxVal,
+          time: now
+        });
+        if (detectedPeaks.length > 10) detectedPeaks.shift();
+        renderGlassPeakList();
+      }
+
+      lastPeakTime = now;
+
+      // Atualiza display
+      glassState.smoothedHz = peakFreq;
+      glassState.detectedHz = peakFreq;
+
+      if (glassHzValue) {
+        glassHzValue.textContent = Math.round(peakFreq);
+        glassHzValue.classList.remove('silent');
+        glassHzValue.classList.add('found');
+      }
+      if (glassMatchLight) {
+        glassMatchLight.classList.add('active');
+      }
+      if (glassStatusText) {
+        glassStatusText.textContent = '✨ Frequência capturada: ' + Math.round(peakFreq) + ' Hz';
+      }
+    }
+
+    function renderGlassPeakList() {
+      if (!glassPeakList) return;
+
+      if (detectedPeaks.length === 0) {
+        glassPeakList.innerHTML = '<div style="color:#5a7196; font-size:0.85rem; text-align:center; padding: 1rem 0;">Nenhum pico detectado ainda...</div>';
+        return;
+      }
+
+      var sorted = detectedPeaks.slice().sort(function(a, b) {
+        return b.mag - a.mag;
+      });
+
+      var html = '';
+      for (var i = 0; i < sorted.length; i++) {
+        var p = sorted[i];
+        var magPercent = Math.round((p.mag / 255) * 100);
+        html += '<div class="peak-item" data-freq="' + p.freq.toFixed(1) + '">' +
+                  '<span class="freq">' + Math.round(p.freq) + ' Hz</span>' +
+                  '<span class="db">' + magPercent + '%</span>' +
+                  '<button class="use-btn" data-freq="' + p.freq.toFixed(1) + '">Usar como alvo</button>' +
+                '</div>';
+      }
+      glassPeakList.innerHTML = html;
+
+      // Listeners dos botões
+      var useButtons = glassPeakList.querySelectorAll('.use-btn');
+      for (var k = 0; k < useButtons.length; k++) {
+        useButtons[k].addEventListener('click', function(e) {
+          e.stopPropagation();
+          var f = parseFloat(this.getAttribute('data-freq'));
+          applyTargetToVoice(f);
+        });
+      }
+
+      var items = glassPeakList.querySelectorAll('.peak-item');
+      for (var m = 0; m < items.length; m++) {
+        items[m].addEventListener('click', function() {
+          var f = parseFloat(this.getAttribute('data-freq'));
+          applyTargetToVoice(f);
+        });
+      }
+    }
+
+    function applyTargetToVoice(freq) {
+      if (freq < 100 || freq > 2000) return;
+      TARGET_FREQ = Math.round(freq);
+      if (voiceTargetDisplay) voiceTargetDisplay.textContent = TARGET_FREQ;
+      if (voiceTargetInput) voiceTargetInput.value = TARGET_FREQ;
+      
+      // Feedback visual
+      if (glassStatusText) {
+        glassStatusText.textContent = '✅ Aplicado como alvo: ' + TARGET_FREQ + ' Hz';
+      }
+      // Muda para a aba de voz automaticamente
+      switchTab('voice');
+    }
+
+    // ============================================================
+    // MODO 2: MEDIR Hz DA VOZ
+    // ============================================================
+    function processVoiceMode(rms) {
+      // Se não há som suficiente, decai
+      if (rms < SILENCE_RMS) {
+        voiceState.smoothedHz *= 0.9;
+        if (voiceState.smoothedHz < 30) {
+          voiceState.smoothedHz = 0;
+          if (voiceHzValue) {
+            voiceHzValue.textContent = '---';
+            voiceHzValue.classList.add('silent');
+            voiceHzValue.classList.remove('matching');
+          }
+          if (voiceMatchLight) voiceMatchLight.classList.remove('active');
+          if (voiceStatusText) voiceStatusText.textContent = '🎙️ Aguardando som...';
+          if (voiceEnergyBar) voiceEnergyBar.style.width = '0%';
+          if (voiceAmplitudeReading) voiceAmplitudeReading.textContent = '0%';
+        }
+        return;
+      }
+
+      // Detecta pitch via autocorrelação (melhor para voz)
+      var pitch = autoCorrelate(timeData, audioContext.sampleRate);
+
+      if (pitch > 0) {
+        voiceState.detectedHz = pitch;
+        voiceState.smoothedHz = voiceState.smoothedHz * SMOOTHING + pitch * (1 - SMOOTHING);
+        updateVoiceUI(voiceState.smoothedHz);
+      }
+    }
+
+    function autoCorrelate(buf, sampleRate) {
+      var SIZE = buf.length;
+      var rms = 0;
+      for (var i = 0; i < SIZE; i++) {
+        rms += buf[i] * buf[i];
+      }
+      rms = Math.sqrt(rms / SIZE);
+      if (rms < SILENCE_RMS) return -1;
+
+      var r1 = 0, r2 = SIZE - 1;
+      var thres = 0.1;
+      for (var i2 = 0; i2 < SIZE / 2; i2++) {
+        if (Math.abs(buf[i2]) < thres) { r1 = i2; break; }
+      }
+      for (var i3 = 1; i3 < SIZE / 2; i3++) {
+        if (Math.abs(buf[SIZE - i3]) < thres) { r2 = SIZE - i3; break; }
+      }
+
+      var trimmed = buf.slice(r1, r2);
+      var newSize = trimmed.length;
+      if (newSize < 100) return -1;
+
+      var c = new Float32Array(newSize);
+      for (var i4 = 0; i4 < newSize; i4++) {
+        for (var j = 0; j < newSize - i4; j++) {
+          c[i4] += trimmed[j] * trimmed[j + i4];
+        }
+      }
+
+      var d = 0;
+      while (d < newSize - 1 && c[d] > c[d + 1]) d++;
+
+      var maxval = -1, maxpos = -1;
+      for (var i5 = d; i5 < newSize; i5++) {
+        if (c[i5] > maxval) {
+          maxval = c[i5];
+          maxpos = i5;
+        }
+      }
+      if (maxpos <= 0) return -1;
+
+      var T0 = maxpos;
+      var x1 = c[T0 - 1] || 0;
+      var x2 = c[T0];
+      var x3 = c[T0 + 1] || 0;
+      var a = (x1 + x3 - 2 * x2) / 2;
+      var b = (x3 - x1) / 2;
+      if (a) T0 = T0 - b / (2 * a);
+
+      var freq = sampleRate / T0;
+      if (freq < 60 || freq > 2000) return -1;
+      return freq;
+    }
+
+    function updateVoiceUI(freq) {
+      var match = Math.abs(freq - TARGET_FREQ) < 8;
+      var energy = computeEnergyFromFreq(freq, TARGET_FREQ);
+      var energyPercent = Math.round(energy * 100);
+
+      if (voiceHzValue) {
+        voiceHzValue.textContent = Math.round(freq);
+        voiceHzValue.classList.remove('silent');
+        voiceHzValue.classList.toggle('matching', match);
+      }
+
+      // Marcador vocal
+      if (voiceMarker) {
+        voiceMarker.style.left = freqToMarkerPercent(freq) + '%';
+      }
+
+      // Match
+      if (voiceMatchLight) {
+        voiceMatchLight.classList.toggle('active', match);
+      }
+
+      // Status
+      if (voiceStatusText) {
+        var diff = Math.abs(freq - TARGET_FREQ);
+        if (match) {
+          voiceStatusText.textContent = '✨ RESSONÂNCIA PERFEITA ✨';
+        } else if (diff < 20) {
+          voiceStatusText.textContent = '🔵 Muito próximo...';
+        } else if (freq < TARGET_FREQ) {
+          voiceStatusText.textContent = '⬇️ Abaixo do alvo (' + TARGET_FREQ + ' Hz)';
+        } else {
+          voiceStatusText.textContent = '⬆️ Acima do alvo (' + TARGET_FREQ + ' Hz)';
+        }
+      }
+
+      // Energia
+      if (voiceEnergyBar) voiceEnergyBar.style.width = energyPercent + '%';
+      if (voiceAmplitudeReading) voiceAmplitudeReading.textContent = energyPercent + '%';
+
+      // Quebra
+      if (!voiceState.cracked && energy > 0.92) {
+        voiceState.cracked = true;
+        if (voiceCrackMessage) {
+          voiceCrackMessage.innerHTML = '💔 A TAÇA TRINCOU! 💔';
+          voiceCrackMessage.style.color = '#ff8a8a';
+        }
+      }
+    }
+
+    // ============================================================
+    // DESENHO DOS CANVAS
+    // ============================================================
+    function resizeCanvases() {
+      if (glassCanvas) {
+        glassCanvas.width = glassCanvas.parentElement.clientWidth;
+        glassCanvas.height = 400;
+      }
+      if (voiceCanvas) {
+        voiceCanvas.width = voiceCanvas.parentElement.clientWidth;
+        voiceCanvas.height = 400;
+      }
+    }
+
+    function drawGlassCanvas() {
+      if (!glassCtx) return;
+      var w = glassCanvas.width;
+      var h = glassCanvas.height;
+
+      glassCtx.fillStyle = '#0a0f18';
+      glassCtx.fillRect(0, 0, w, h);
+
+      glassCtx.beginPath();
+      glassCtx.strokeStyle = '#1e2d44';
+      glassCtx.lineWidth = 1;
+      glassCtx.moveTo(0, h / 2);
+      glassCtx.lineTo(w, h / 2);
+      glassCtx.stroke();
+
+      // Desenha espectro de frequência (barras)
+      if (freqData && freqData.length > 0) {
+        var barCount = 128;
+        var step = Math.floor(freqData.length / barCount);
+        var barW = w / barCount;
+
+        for (var i = 0; i < barCount; i++) {
+          var val = 0;
+          for (var k = 0; k < step; k++) {
+            val = Math.max(val, freqData[i * step + k]);
+          }
+          var barH = (val / 255) * (h * 0.8);
+          var x = i * barW;
+          var y = h - barH;
+
+          var gradient = glassCtx.createLinearGradient(0, h, 0, y);
+          gradient.addColorStop(0, '#1a3a5a');
+          gradient.addColorStop(1, '#50fa7b');
+          glassCtx.fillStyle = gradient;
+          glassCtx.fillRect(x, y, barW - 1, barH);
+        }
+      }
+
+      // Linha do pico detectado
+      if (glassState.smoothedHz > 0 && freqData) {
+        var nyquist = audioContext.sampleRate / 2;
+        var bin = glassState.smoothedHz / nyquist;
+        var xPos = bin * w;
+        glassCtx.beginPath();
+        glassCtx.strokeStyle = '#ffb86b';
+        glassCtx.lineWidth = 3;
+        glassCtx.shadowColor = '#ffb86b';
+        glassCtx.shadowBlur = 15;
+        glassCtx.moveTo(xPos, 0);
+        glassCtx.lineTo(xPos, h);
+        glassCtx.stroke();
+        glassCtx.shadowBlur = 0;
+      }
+
+      // Textos
+      glassCtx.font = 'bold 14px monospace';
+      glassCtx.fillStyle = '#50fa7b';
+      glassCtx.fillText('Espectro de frequência', 20, 30);
+      if (glassState.smoothedHz > 0) {
+        glassCtx.fillStyle = '#ffb86b';
+        glassCtx.fillText('Pico: ' + Math.round(glassState.smoothedHz) + ' Hz', 20, 55);
+      }
+
+      requestAnimationFrame(drawGlassCanvas);
+    }
+
+    function drawVoiceCanvas() {
+      if (!voiceCtx) return;
+      var w = voiceCanvas.width;
+      var h = voiceCanvas.height;
+
+      voiceCtx.fillStyle = '#0a0f18';
+      voiceCtx.fillRect(0, 0, w, h);
+
+      voiceCtx.beginPath();
+      voiceCtx.strokeStyle = '#1e2d44';
+      voiceCtx.lineWidth = 1;
+      voiceCtx.moveTo(0, h / 2);
+      voiceCtx.lineTo(w, h / 2);
+      voiceCtx.stroke();
+
+      var targetFreq = TARGET_FREQ;
+      var micFreq = voiceState.smoothedHz > 0 ? voiceState.smoothedHz : targetFreq;
+      var pixelsPerCycle = 200;
+      var cyclesTarget = w / pixelsPerCycle;
+
+      // Onda alvo (laranja)
+      voiceCtx.beginPath();
+      voiceCtx.strokeStyle = '#ffb86b';
+      voiceCtx.lineWidth = 3;
+      voiceCtx.shadowColor = '#ffb86b';
+      voiceCtx.shadowBlur = 12;
+      for (var x = 0; x < w; x++) {
+        var t = x / w;
+        var phase = t * cyclesTarget * 2 * Math.PI;
+        var y = h / 2 + Math.sin(phase) * 100;
+        if (x === 0) voiceCtx.moveTo(x, y);
+        else voiceCtx.lineTo(x, y);
+      }
+      voiceCtx.stroke();
+
+      // Onda da voz (azul)
+      if (voiceState.smoothedHz > 0) {
+        var energy = computeEnergyFromFreq(voiceState.smoothedHz, targetFreq);
+        var micAmplitude = 20 + energy * 110;
+        voiceCtx.beginPath();
+        voiceCtx.strokeStyle = '#64d8ff';
+        voiceCtx.lineWidth = 3;
+        voiceCtx.shadowColor = '#64d8ff';
+        voiceCtx.shadowBlur = 15;
+        for (var x2 = 0; x2 < w; x2++) {
+          var t2 = x2 / w;
+          var phase2 = t2 * cyclesTarget * 2 * Math.PI * (micFreq / targetFreq);
+          var y2 = h / 2 + Math.sin(phase2) * micAmplitude;
+          if (x2 === 0) voiceCtx.moveTo(x2, y2);
+          else voiceCtx.lineTo(x2, y2);
+        }
+        voiceCtx.stroke();
+
+        // Batimento (rosa)
+        if (!voiceState.cracked) {
+          voiceCtx.beginPath();
+          voiceCtx.strokeStyle = '#ff6b9d';
+          voiceCtx.lineWidth = 2.5;
+          voiceCtx.shadowColor = '#ff6b9d';
+          voiceCtx.shadowBlur = 12;
+          voiceCtx.setLineDash([6, 6]);
+          for (var x3 = 0; x3 < w; x3++) {
+            var t3 = x3 / w;
+            var ph1 = t3 * cyclesTarget * 2 * Math.PI;
+            var ph2 = t3 * cyclesTarget * 2 * Math.PI * (micFreq / targetFreq);
+            var sum = Math.sin(ph1) + Math.sin(ph2);
+            var y3 = h / 2 + (sum / 2) * 100 * (0.5 + energy * 0.8);
+            if (x3 === 0) voiceCtx.moveTo(x3, y3);
+            else voiceCtx.lineTo(x3, y3);
+          }
+          voiceCtx.stroke();
+          voiceCtx.setLineDash([]);
+        }
+      }
+
+      voiceCtx.shadowBlur = 0;
+
+      // Textos
+      voiceCtx.font = 'bold 14px monospace';
+      voiceCtx.fillStyle = '#64d8ff';
+      if (voiceState.smoothedHz > 0) {
+        voiceCtx.fillText('Voz: ' + Math.round(voiceState.smoothedHz) + ' Hz', 20, 40);
+      } else {
+        voiceCtx.fillText('Voz: aguardando som...', 20, 40);
+      }
+      voiceCtx.fillStyle = '#ffb86b';
+      voiceCtx.fillText('Alvo: ' + targetFreq + ' Hz', 20, 70);
+
+      if (voiceState.cracked) {
+        voiceCtx.font = 'bold 24px sans-serif';
+        voiceCtx.fillStyle = '#ff4d6d';
+        voiceCtx.shadowColor = '#ff0000';
+        voiceCtx.shadowBlur = 25;
+        voiceCtx.fillText('💔 TAÇA QUEBRADA 💔', w / 2 - 180, h / 2 - 20);
+        voiceCtx.shadowBlur = 0;
+      }
+
+      requestAnimationFrame(drawVoiceCanvas);
+    }
+
+    // ============================================================
+    // TROCA DE ABAS
+    // ============================================================
+    function switchTab(tabName) {
+      currentMode = tabName;
+
+      for (var i = 0; i < tabBtns.length; i++) {
+        tabBtns[i].classList.toggle('active', tabBtns[i].getAttribute('data-tab') === tabName);
+      }
+      for (var j = 0; j < tabContents.length; j++) {
+        tabContents[j].classList.toggle('active', tabContents[j].id === 'tab-' + tabName);
+      }
+
+      // Redimensiona canvas da aba ativa
+      setTimeout(resizeCanvases, 50);
+    }
+
+    // ============================================================
+    // INICIALIZAÇÃO
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', function() {
+      // Elementos
+      tabBtns = document.querySelectorAll('.tab-btn');
+      tabContents = document.querySelectorAll('.tab-content');
+
+      glassCanvas = document.getElementById('glassCanvas');
+      glassCtx = glassCanvas.getContext('2d');
+      glassHzValue = document.getElementById('glassHzValue');
+      glassLevelBar = document.getElementById('glassLevelBar');
+      glassMatchLight = document.getElementById('glassMatchLight');
+      glassStatusText = document.getElementById('glassStatusText');
+      glassMicBtn = document.getElementById('glassMicBtn');
+      glassClearBtn = document.getElementById('glassClearBtn');
+      glassMicStatus = document.getElementById('glassMicStatus');
+      glassPeakList = document.getElementById('glassPeakList');
+
+      voiceCanvas = document.getElementById('voiceCanvas');
+      voiceCtx = voiceCanvas.getContext('2d');
+      voiceHzValue = document.getElementById('voiceHzValue');
+      voiceLevelBar = document.getElementById('voiceLevelBar');
+      voiceMatchLight = document.getElementById('voiceMatchLight');
+      voiceStatusText = document.getElementById('voiceStatusText');
+      voiceMicBtn = document.getElementById('voiceMicBtn');
+      voiceResetBtn = document.getElementById('voiceResetBtn');
+      voiceMicStatus = document.getElementById('voiceMicStatus');
+      voiceMarker = document.getElementById('voiceMarker');
+      voiceTargetDisplay = document.getElementById('voiceTargetDisplay');
+      voiceTargetInput = document.getElementById('voiceTargetInput');
+      voiceApplyTargetBtn = document.getElementById('voiceApplyTargetBtn');
+      voiceCrackMessage = document.getElementById('voiceCrackMessage');
+      voiceEnergyBar = document.getElementById('voiceEnergyBar');
+      voiceAmplitudeReading = document.getElementById('voiceAmplitudeReading');
+
+      // Resize
+      resizeCanvases();
+      window.addEventListener('resize', resizeCanvases);
+
+      // Abas
+      for (var i = 0; i < tabBtns.length; i++) {
+        tabBtns[i].addEventListener('click', function() {
+          switchTab(this.getAttribute('data-tab'));
+        });
+      }
+
+      // Botões de microfone (ambos controlam o mesmo)
+      glassMicBtn.addEventListener('click', function() {
+        if (isMicActive) stopMicrophone();
+        else startMicrophone();
+      });
+      voiceMicBtn.addEventListener('click', function() {
+        if (isMicActive) stopMicrophone();
+        else startMicrophone();
+      });
+
+      // Limpar aba taça
+      glassClearBtn.addEventListener('click', function() {
+        detectedPeaks = [];
+        glassState.detectedHz = 0;
+        glassState.smoothedHz = 0;
+        glassState.cracked = false;
+        if (glassHzValue) {
+          glassHzValue.textContent = '---';
+          glassHzValue.classList.add('silent');
+          glassHzValue.classList.remove('found');
+        }
+        if (glassMatchLight) glassMatchLight.classList.remove('active');
+        if (glassStatusText) glassStatusText.textContent = '🎙️ Aguardando toque na taça...';
+        if (glassLevelBar) glassLevelBar.style.width = '0%';
+        renderGlassPeakList();
+      });
+
+      // Reset aba voz
+      voiceResetBtn.addEventListener('click', function() {
+        voiceState.detectedHz = 0;
+        voiceState.smoothedHz = 0;
+        voiceState.cracked = false;
+        if (voiceHzValue) {
+          voiceHzValue.textContent = '---';
+          voiceHzValue.classList.add('silent');
+          voiceHzValue.classList.remove('matching');
+        }
+        if (voiceMatchLight) voiceMatchLight.classList.remove('active');
+        if (voiceStatusText) voiceStatusText.textContent = '🎙️ Faça um som constante...';
+        if (voiceLevelBar) voiceLevelBar.style.width = '0%';
+        if (voiceEnergyBar) voiceEnergyBar.style.width = '0%';
+        if (voiceAmplitudeReading) voiceAmplitudeReading.textContent = '0%';
+        if (voiceMarker) voiceMarker.style.left = '0%';
+        if (voiceCrackMessage) {
+          voiceCrackMessage.innerHTML = '🍷 A taça está intacta…';
+          voiceCrackMessage.style.color = '#aac8ff';
+        }
+      });
+
+      // Aplicar alvo
+      voiceApplyTargetBtn.addEventListener('click', function() {
+        var val = parseInt(voiceTargetInput.value);
+        if (val >= 100 && val <= 2000) {
+          TARGET_FREQ = val;
+          voiceTargetDisplay.textContent = val;
+          if (voiceState.smoothedHz > 0) {
+            updateVoiceUI(voiceState.smoothedHz);
+          }
+        }
+      });
+
+      voiceTargetInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') voiceApplyTargetBtn.click();
+      });
+
+      // Inicia os loops de desenho
+      drawGlassCanvas();
+      drawVoiceCanvas();
+    });
+
+    // Cleanup
+    window.addEventListener('beforeunload', function() {
+      if (stream) stream.getTracks().forEach(function(t) { t.stop(); });
+      if (audioContext && audioContext.state !== 'closed') audioContext.close();
+    });
+  </script>
+</body>
+</html>
