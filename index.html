@@ -6,7 +6,11 @@
 <title>O Grito na Taça</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
 body{
   background:linear-gradient(145deg,#0b0e14,#1a1f2c);
@@ -65,8 +69,13 @@ h1{
   color:white;
 }
 
-.content{display:none}
-.content.active{display:block}
+.content{
+  display:none;
+}
+
+.content.active{
+  display:block;
+}
 
 .grid{
   display:grid;
@@ -145,6 +154,7 @@ h1{
   height:100%;
   width:0;
   background:linear-gradient(90deg,#64d8ff,#50fa7b);
+  transition:width .08s;
 }
 
 .status{
@@ -170,6 +180,11 @@ h1{
 
 .btn:hover{
   background:#2b4265;
+}
+
+.btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
 }
 
 .btn.secondary{
@@ -230,6 +245,7 @@ input[type=number]{
   width:0;
   height:100%;
   background:linear-gradient(90deg,#ffb86b,#ff4d6d);
+  transition:width .1s;
 }
 
 .peaks{
@@ -255,9 +271,23 @@ input[type=number]{
   font-weight:bold;
 }
 
+.voice-match{
+  margin-top:15px;
+  text-align:center;
+  padding:10px;
+  border-radius:12px;
+  background:#101a28;
+  color:#8ca4c8;
+}
+
 @media(max-width:800px){
-  .grid{grid-template-columns:1fr}
-  .hz-value{font-size:3rem}
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .hz-value{
+    font-size:3rem;
+  }
 }
 </style>
 </head>
@@ -265,6 +295,7 @@ input[type=number]{
 <body>
 
 <h1>⚡ O GRITO NA TAÇA ⚡</h1>
+
 <div class="subhead">
 Descobrir Hz da Taça · Medir Hz da Voz · Ressonância
 </div>
@@ -272,6 +303,7 @@ Descobrir Hz da Taça · Medir Hz da Voz · Ressonância
 <div class="panel">
 
 <div class="tabs">
+
 <button class="tab active" data-tab="glass">
 🍷 Descobrir Hz da Taça
 </button>
@@ -279,10 +311,12 @@ Descobrir Hz da Taça · Medir Hz da Voz · Ressonância
 <button class="tab" data-tab="voice">
 🎤 Medir Hz da Voz
 </button>
+
 </div>
 
+
 <!-- =====================================================
-     TAÇA
+     ABA TAÇA
 ===================================================== -->
 
 <div class="content active" id="glass">
@@ -298,29 +332,41 @@ Descobrir Hz da Taça · Medir Hz da Voz · Ressonância
 </div>
 
 <div class="hz">
-<div class="hz-value" id="glassHz">---</div>
-<div class="hz-label">
-FREQUÊNCIA DETECTADA
+
+<div class="hz-value" id="glassHz">
+---
 </div>
+
+<div class="hz-label">
+FREQUÊNCIA DA TAÇA
+</div>
+
 </div>
 
 <div class="timer">
-<div class="timer-number" id="timer">5.0</div>
+
+<div class="timer-number" id="glassTimer">
+5.0
+</div>
+
 <div class="timer-label">
 SEGUNDOS DE DETECÇÃO
 </div>
+
 </div>
 
 <div class="level">
+
 <div class="level-fill" id="glassLevel"></div>
+
 </div>
 
 <div class="status" id="glassStatus">
 Ative o microfone para começar
 </div>
 
-<button class="btn" id="micBtn">
-🎤 Ativar microfone
+<button class="btn" id="glassMic">
+🎤 Iniciar medição da taça
 </button>
 
 <button class="btn secondary" id="newScan">
@@ -331,6 +377,7 @@ Ative o microfone para começar
 
 </div>
 
+
 <div class="card">
 
 <div class="title">
@@ -338,41 +385,66 @@ Ative o microfone para começar
 </div>
 
 <div class="note">
+
 Ative o microfone e toque na borda da taça.
+
 <br><br>
-O sistema analisa o som durante <strong>5 segundos</strong>,
-procura a frequência dominante e salva automaticamente
-o resultado.
+
+O sistema mede o som durante
+<strong>5 segundos</strong>.
+
 <br><br>
-A frequência salva será enviada automaticamente para
-a aba <strong>Medir Hz da Voz</strong>.
-</div>
+
+Durante esse período são feitas várias
+medições da frequência.
+
+<br><br>
+
+Ao final, o sistema calcula a frequência
+mais estável encontrada.
+
+<br><br>
+
+Essa frequência será enviada
+automaticamente para a aba
+<strong>Medir Hz da Voz</strong>.
 
 </div>
 
 </div>
+
+</div>
+
 
 <div>
-<canvas id="glassCanvas" width="900" height="420"></canvas>
+
+<canvas
+id="glassCanvas"
+width="900"
+height="420">
+</canvas>
 
 <div class="card" style="margin-top:15px">
 
 <div class="title">
-📈 PICOS DETECTADOS
+📈 FREQUÊNCIAS ENCONTRADAS
 </div>
 
 <div id="peaks" class="peaks">
-Nenhum pico detectado.
+Nenhuma frequência detectada.
 </div>
 
 </div>
+
 </div>
 
 </div>
+
 </div>
+
 
 <!-- =====================================================
-     VOZ
+     ABA VOZ
 ===================================================== -->
 
 <div class="content" id="voice">
@@ -388,22 +460,45 @@ Nenhum pico detectado.
 </div>
 
 <div class="hz">
-<div class="hz-value" id="voiceHz">---</div>
+
+<div class="hz-value" id="voiceHz">
+---
+</div>
+
 <div class="hz-label">
 FREQUÊNCIA DA SUA VOZ
 </div>
+
 </div>
 
+
+<!-- TIMER DA VOZ -->
+
+<div class="timer">
+
+<div class="timer-number" id="voiceTimer">
+5.0
+</div>
+
+<div class="timer-label">
+SEGUNDOS DE MEDIÇÃO
+</div>
+
+</div>
+
+
 <div class="level">
+
 <div class="level-fill" id="voiceLevel"></div>
+
 </div>
 
 <div class="status" id="voiceStatus">
-Ative o microfone e faça um som constante
+Pressione o botão e faça um som constante
 </div>
 
 <button class="btn" id="voiceMic">
-🎤 Ativar microfone
+🎤 Medir minha voz por 5 segundos
 </button>
 
 <button class="btn secondary" id="voiceReset">
@@ -412,7 +507,10 @@ Ative o microfone e faça um som constante
 
 </div>
 
-<!-- FREQUÊNCIA ALVO EXISTE SOMENTE NA ABA VOZ -->
+
+<!-- =====================================================
+     FREQUÊNCIA ALVO SOMENTE NA VOZ
+===================================================== -->
 
 <div class="card">
 
@@ -422,8 +520,10 @@ Ative o microfone e faça um som constante
 
 <div class="target">
 
-<span class="target-value" id="targetDisplay">
-850
+<span
+class="target-value"
+id="targetDisplay">
+---
 </span>
 
 <span>Hz</span>
@@ -445,21 +545,33 @@ Aplicar
 </div>
 
 <div class="note" style="margin-top:15px">
-A frequência detectada na taça é colocada
-automaticamente aqui.
+
+A frequência da taça medida na primeira
+aba aparece automaticamente aqui.
+
 <br><br>
-Tente produzir uma nota próxima do alvo.
+
+Você também pode alterar o valor
+manualmente para fazer testes.
+
 </div>
+
 
 <div style="margin-top:20px">
 
-<div id="crackMessage"
+<div
+id="crackMessage"
 style="color:#aac8ff">
 🍷 A taça está intacta…
 </div>
 
 <div class="energy">
-<div class="energy-fill" id="energy"></div>
+
+<div
+class="energy-fill"
+id="energy">
+</div>
+
 </div>
 
 <div style="
@@ -479,31 +591,60 @@ Energia de ressonância
 
 </div>
 
+<div class="voice-match" id="voiceMatch">
+Aguardando medição...
 </div>
 
 </div>
 
 </div>
+
+</div>
+
 
 <div>
-<canvas id="voiceCanvas" width="900" height="420"></canvas>
-</div>
+
+<canvas
+id="voiceCanvas"
+width="900"
+height="420">
+</canvas>
 
 </div>
 
 </div>
 
 </div>
+
+</div>
+
 
 <script>
+
 /* =========================================================
    CONFIGURAÇÃO
 ========================================================= */
 
 const DETECTION_TIME = 5000;
+
+/*
+  Mesma faixa usada pela detecção
+  da taça e da voz.
+*/
+
+const MIN_FREQ = 60;
+const MAX_FREQ = 2000;
+
+/*
+  Volume mínimo necessário.
+*/
+
 const SILENCE = 0.008;
 
-let TARGET_FREQ = 850;
+
+/* =========================================================
+   VARIÁVEIS
+========================================================= */
 
 let audioContext = null;
 let analyser = null;
@@ -514,85 +655,177 @@ let freqData = null;
 let timeData = null;
 
 let micActive = false;
+
 let currentMode = "glass";
 
-let scanRunning = false;
-let scanStart = 0;
-let scanTimer = null;
+let glassRunning = false;
+let voiceRunning = false;
 
-let detectedFreq = 0;
-let bestFreq = 0;
-let bestMagnitude = 0;
+let glassStart = 0;
+let voiceStart = 0;
 
-let voiceFreq = 0;
+let glassTimerInterval = null;
+let voiceTimerInterval = null;
+
+
+/*
+  Todas as frequências encontradas
+  durante a medição da taça.
+*/
+
+let glassSamples = [];
+
+
+/*
+  Todas as frequências válidas
+  encontradas durante a medição da voz.
+*/
+
+let voiceSamples = [];
+
+
+/*
+  Frequência atual.
+*/
+
+let glassFrequency = 0;
+let voiceFrequency = 0;
+
+
+/*
+  Frequência alvo.
+*/
+
+let TARGET_FREQ = 850;
+
+
+/*
+  Controle visual.
+*/
+
 let voiceCracked = false;
-
-let peaks = [];
 
 
 /* =========================================================
    ELEMENTOS
 ========================================================= */
 
-const tabs = document.querySelectorAll(".tab");
-const contents = document.querySelectorAll(".content");
+const tabs =
+  document.querySelectorAll(".tab");
 
-const glassHz = document.getElementById("glassHz");
-const glassLevel = document.getElementById("glassLevel");
-const glassStatus = document.getElementById("glassStatus");
+const contents =
+  document.querySelectorAll(".content");
 
-const timer = document.getElementById("timer");
-const savedInfo = document.getElementById("savedInfo");
 
-const micBtn = document.getElementById("micBtn");
-const newScan = document.getElementById("newScan");
+const glassHz =
+  document.getElementById("glassHz");
 
-const voiceHz = document.getElementById("voiceHz");
-const voiceLevel = document.getElementById("voiceLevel");
-const voiceStatus = document.getElementById("voiceStatus");
+const glassLevel =
+  document.getElementById("glassLevel");
 
-const voiceMic = document.getElementById("voiceMic");
-const voiceReset = document.getElementById("voiceReset");
+const glassStatus =
+  document.getElementById("glassStatus");
 
-const targetDisplay = document.getElementById("targetDisplay");
-const targetInput = document.getElementById("targetInput");
-const applyTarget = document.getElementById("applyTarget");
+const glassTimer =
+  document.getElementById("glassTimer");
 
-const energy = document.getElementById("energy");
-const energyText = document.getElementById("energyText");
-const crackMessage = document.getElementById("crackMessage");
+const glassMic =
+  document.getElementById("glassMic");
 
-const peaksBox = document.getElementById("peaks");
+const newScan =
+  document.getElementById("newScan");
 
-const glassCanvas = document.getElementById("glassCanvas");
-const glassCtx = glassCanvas.getContext("2d");
+const savedInfo =
+  document.getElementById("savedInfo");
 
-const voiceCanvas = document.getElementById("voiceCanvas");
-const voiceCtx = voiceCanvas.getContext("2d");
+const peaksBox =
+  document.getElementById("peaks");
+
+
+const voiceHz =
+  document.getElementById("voiceHz");
+
+const voiceLevel =
+  document.getElementById("voiceLevel");
+
+const voiceStatus =
+  document.getElementById("voiceStatus");
+
+const voiceTimer =
+  document.getElementById("voiceTimer");
+
+const voiceMic =
+  document.getElementById("voiceMic");
+
+const voiceReset =
+  document.getElementById("voiceReset");
+
+
+const targetDisplay =
+  document.getElementById("targetDisplay");
+
+const targetInput =
+  document.getElementById("targetInput");
+
+const applyTarget =
+  document.getElementById("applyTarget");
+
+
+const energy =
+  document.getElementById("energy");
+
+const energyText =
+  document.getElementById("energyText");
+
+const crackMessage =
+  document.getElementById("crackMessage");
+
+const voiceMatch =
+  document.getElementById("voiceMatch");
+
+
+const glassCanvas =
+  document.getElementById("glassCanvas");
+
+const glassCtx =
+  glassCanvas.getContext("2d");
+
+
+const voiceCanvas =
+  document.getElementById("voiceCanvas");
+
+const voiceCtx =
+  voiceCanvas.getContext("2d");
 
 
 /* =========================================================
-   ABA
+   TROCA DE ABA
 ========================================================= */
 
 tabs.forEach(tab => {
 
   tab.addEventListener("click", () => {
 
-    const name = tab.dataset.tab;
+    currentMode =
+      tab.dataset.tab;
 
-    currentMode = name;
+    tabs.forEach(t => {
 
-    tabs.forEach(t =>
-      t.classList.toggle("active",t === tab)
-    );
-
-    contents.forEach(c =>
-      c.classList.toggle(
+      t.classList.toggle(
         "active",
-        c.id === name
-      )
-    );
+        t === tab
+      );
+
+    });
+
+    contents.forEach(content => {
+
+      content.classList.toggle(
+        "active",
+        content.id === currentMode
+      );
+
+    });
 
   });
 
@@ -605,72 +838,90 @@ tabs.forEach(tab => {
 
 async function startMicrophone(){
 
-  if(micActive){
-    stopMicrophone();
-    return;
-  }
+  if(micActive)
+    return true;
 
   try{
 
-    stream = await navigator.mediaDevices.getUserMedia({
-      audio:{
-        echoCancellation:false,
-        noiseSuppression:false,
-        autoGainControl:false
-      }
-    });
+    stream =
+      await navigator.mediaDevices
+        .getUserMedia({
 
-    const AC =
+          audio:{
+            echoCancellation:false,
+            noiseSuppression:false,
+            autoGainControl:false
+          }
+
+        });
+
+
+    const AudioCtx =
       window.AudioContext ||
       window.webkitAudioContext;
 
-    audioContext = new AC();
 
-    if(audioContext.state === "suspended")
+    audioContext =
+      new AudioCtx();
+
+
+    if(
+      audioContext.state ===
+      "suspended"
+    ){
+
       await audioContext.resume();
 
-    analyser = audioContext.createAnalyser();
+    }
+
+
+    analyser =
+      audioContext.createAnalyser();
+
 
     /*
-      FFT grande para melhorar a resolução
-      de frequência.
+      FFT grande para melhorar
+      a resolução da frequência.
     */
 
     analyser.fftSize = 16384;
 
-    analyser.smoothingTimeConstant = 0.25;
+    analyser.smoothingTimeConstant =
+      0.15;
+
 
     freqData =
       new Uint8Array(
         analyser.frequencyBinCount
       );
 
+
     timeData =
       new Float32Array(
         analyser.fftSize
       );
+
 
     microphone =
       audioContext.createMediaStreamSource(
         stream
       );
 
-    microphone.connect(analyser);
+
+    microphone.connect(
+      analyser
+    );
+
 
     micActive = true;
 
-    updateMicButtons();
+    glassMic.textContent =
+      "🎤 Microfone ativo";
 
-    /*
-      Se estivermos na aba da taça,
-      inicia automaticamente o contador.
-    */
+    voiceMic.textContent =
+      "🎤 Microfone ativo";
 
-    if(currentMode === "glass"){
-      startScan();
-    }
-
-    analyse();
+    return true;
 
   }catch(error){
 
@@ -682,27 +933,39 @@ async function startMicrophone(){
     voiceStatus.textContent =
       "❌ Não foi possível acessar o microfone.";
 
+    return false;
+
   }
 
 }
 
 
+/* =========================================================
+   PARAR MICROFONE
+========================================================= */
+
 function stopMicrophone(){
 
   if(stream){
 
-    stream.getTracks().forEach(
-      track => track.stop()
-    );
+    stream
+      .getTracks()
+      .forEach(track =>
+        track.stop()
+      );
 
   }
 
-  if(audioContext &&
-     audioContext.state !== "closed"){
+
+  if(
+    audioContext &&
+    audioContext.state !== "closed"
+  ){
 
     audioContext.close();
 
   }
+
 
   stream = null;
   audioContext = null;
@@ -711,455 +974,79 @@ function stopMicrophone(){
 
   micActive = false;
 
-  stopScan();
 
-  updateMicButtons();
+  glassMic.textContent =
+    "🎤 Iniciar medição da taça";
 
-}
-
-
-function updateMicButtons(){
-
-  const text =
-    micActive
-      ? "🎤 Desativar microfone"
-      : "🎤 Ativar microfone";
-
-  micBtn.textContent = text;
-  voiceMic.textContent = text;
+  voiceMic.textContent =
+    "🎤 Medir minha voz por 5 segundos";
 
 }
 
 
 /* =========================================================
-   TIMER DE 5 SEGUNDOS
+   CAPTURA DE ÁUDIO
 ========================================================= */
 
-function startScan(){
+function getAudioData(){
 
-  if(!micActive) return;
+  if(
+    !analyser ||
+    !audioContext
+  )
+    return null;
 
-  scanRunning = true;
-
-  scanStart = performance.now();
-
-  bestFreq = 0;
-  bestMagnitude = 0;
-
-  peaks = [];
-
-  glassHz.textContent = "---";
-  glassHz.classList.remove("found");
-
-  savedInfo.textContent = "";
-
-  glassStatus.textContent =
-    "🎙️ Toque na taça! Detectando...";
-
-  timer.textContent = "5.0";
-
-  clearInterval(scanTimer);
-
-  scanTimer = setInterval(updateTimer,50);
-
-}
-
-
-function updateTimer(){
-
-  if(!scanRunning) return;
-
-  const elapsed =
-    performance.now() - scanStart;
-
-  const remaining =
-    Math.max(
-      0,
-      DETECTION_TIME - elapsed
-    );
-
-  timer.textContent =
-    (remaining / 1000).toFixed(1);
-
-  if(remaining <= 0){
-
-    finishScan();
-
-  }
-
-}
-
-
-function stopScan(){
-
-  scanRunning = false;
-
-  clearInterval(scanTimer);
-
-  scanTimer = null;
-
-}
-
-
-function finishScan(){
-
-  if(!scanRunning) return;
-
-  scanRunning = false;
-
-  clearInterval(scanTimer);
-
-  scanTimer = null;
-
-  timer.textContent = "0.0";
-
-  /*
-    Salva a melhor frequência encontrada.
-  */
-
-  if(bestFreq > 0){
-
-    const finalFreq =
-      Math.round(bestFreq);
-
-    detectedFreq = finalFreq;
-
-    /*
-      Salva na memória do navegador.
-    */
-
-    localStorage.setItem(
-      "tacaFrequencia",
-      finalFreq
-    );
-
-    /*
-      Substitui automaticamente
-      o alvo da aba Voz.
-    */
-
-    TARGET_FREQ = finalFreq;
-
-    targetDisplay.textContent =
-      finalFreq;
-
-    targetInput.value =
-      finalFreq;
-
-    glassHz.textContent =
-      finalFreq;
-
-    glassHz.classList.add("found");
-
-    savedInfo.textContent =
-      "✓ Frequência salva: " +
-      finalFreq +
-      " Hz";
-
-    glassStatus.textContent =
-      "✅ Medição concluída! " +
-      finalFreq +
-      " Hz enviado para Voz.";
-
-  }else{
-
-    glassStatus.textContent =
-      "⚠️ Nenhuma frequência detectada. Faça uma nova medição.";
-
-  }
-
-}
-
-
-/* =========================================================
-   ANÁLISE DE ÁUDIO
-========================================================= */
-
-function analyse(){
-
-  if(!micActive || !analyser)
-    return;
 
   analyser.getFloatTimeDomainData(
     timeData
   );
 
-  let rms = 0;
 
-  for(let i=0;i<timeData.length;i++){
+  let sum = 0;
 
-    rms +=
+  for(
+    let i = 0;
+    i < timeData.length;
+    i++
+  ){
+
+    sum +=
       timeData[i] *
       timeData[i];
 
   }
 
-  rms =
+
+  const rms =
     Math.sqrt(
-      rms / timeData.length
+      sum / timeData.length
     );
 
-  const level =
-    Math.min(
-      100,
-      rms * 1500
-    );
 
-  if(currentMode === "glass"){
-
-    glassLevel.style.width =
-      level + "%";
-
-    processGlass(rms);
-
-  }else{
-
-    voiceLevel.style.width =
-      level + "%";
-
-    processVoice(rms);
-
-  }
-
-  requestAnimationFrame(analyse);
-
-}
-
-
-/* =========================================================
-   DETECÇÃO DA TAÇA
-========================================================= */
-
-function processGlass(rms){
-
-  if(!scanRunning)
-    return;
-
-  if(rms < SILENCE)
-    return;
-
-  analyser.getByteFrequencyData(
-    freqData
-  );
-
-  const binCount =
-    analyser.frequencyBinCount;
-
-  const binWidth =
-    audioContext.sampleRate /
-    analyser.fftSize;
-
-  let max = 0;
-  let maxBin = -1;
-
-  /*
-    Procuramos somente uma faixa
-    útil para a taça.
-  */
-
-  const minBin =
-    Math.floor(100 / binWidth);
-
-  const maxBinLimit =
-    Math.min(
-      binCount - 2,
-      Math.floor(4000 / binWidth)
-    );
-
-  for(
-    let i=minBin;
-    i<maxBinLimit;
-    i++
-  ){
-
-    if(freqData[i] > max){
-
-      max =
-        freqData[i];
-
-      maxBin = i;
-
-    }
-
-  }
-
-  if(maxBin < 1)
-    return;
-
-  /*
-    Interpolação parabólica para
-    melhorar a precisão.
-  */
-
-  const y1 =
-    freqData[maxBin-1];
-
-  const y2 =
-    freqData[maxBin];
-
-  const y3 =
-    freqData[maxBin+1];
-
-  const a =
-    (y1+y3-2*y2)/2;
-
-  const b =
-    (y3-y1)/2;
-
-  let offset = 0;
-
-  if(a !== 0)
-    offset = -b/(2*a);
-
-  const frequency =
-    (maxBin + offset) *
-    binWidth;
-
-  if(
-    frequency < 100 ||
-    frequency > 4000
-  )
-    return;
-
-  /*
-    Mostra os Hz imediatamente.
-  */
-
-  glassHz.textContent =
-    Math.round(frequency);
-
-  glassHz.classList.add("found");
-
-  /*
-    Guarda somente o pico mais forte
-    durante os 5 segundos.
-  */
-
-  if(max > bestMagnitude){
-
-    bestMagnitude = max;
-    bestFreq = frequency;
-
-  }
-
-  /*
-    Salva alguns picos.
-  */
-
-  const existing =
-    peaks.find(
-      p =>
-      Math.abs(p.freq-frequency) < 8
-    );
-
-  if(existing){
-
-    if(max > existing.mag)
-      existing.mag = max;
-
-  }else{
-
-    peaks.push({
-      freq:frequency,
-      mag:max
-    });
-
-    if(peaks.length > 12)
-      peaks.shift();
-
-  }
-
-  renderPeaks();
-
-}
-
-
-/* =========================================================
-   LISTA DE PICOS
-========================================================= */
-
-function renderPeaks(){
-
-  if(!peaks.length){
-
-    peaksBox.textContent =
-      "Nenhum pico detectado.";
-
-    return;
-
-  }
-
-  const sorted =
-    [...peaks].sort(
-      (a,b)=>b.mag-a.mag
-    );
-
-  peaksBox.innerHTML =
-    sorted.map(p => `
-
-      <div class="peak">
-
-        <span>
-          ${Math.round(p.freq)} Hz
-        </span>
-
-        <span>
-          ${Math.round(p.mag/255*100)}%
-        </span>
-
-      </div>
-
-    `).join("");
-
-}
-
-
-/* =========================================================
-   DETECÇÃO DA VOZ
-========================================================= */
-
-function processVoice(rms){
-
-  if(rms < SILENCE){
-
-    voiceHz.textContent = "---";
-
-    voiceStatus.textContent =
-      "🎙️ Aguardando sua voz...";
-
-    energy.style.width = "0%";
-    energyText.textContent = "0%";
-
-    return;
-
-  }
-
-  const pitch =
-    autoCorrelate(
-      timeData,
+  return {
+    rms,
+    sampleRate:
       audioContext.sampleRate
-    );
-
-  if(pitch > 0){
-
-    voiceFreq =
-      voiceFreq * .7 +
-      pitch * .3;
-
-    updateVoice(
-      voiceFreq
-    );
-
-  }
+  };
 
 }
 
 
 /* =========================================================
-   AUTOCORRELAÇÃO
+   ALGORITMO ÚNICO DE FREQUÊNCIA
 ========================================================= */
 
-function autoCorrelate(
+/*
+  ESTA É A PARTE MAIS IMPORTANTE.
+
+  A taça e a voz utilizam a MESMA
+  função para descobrir a frequência.
+
+  Dessa maneira os dois valores
+  ficam calculados pelo mesmo método.
+*/
+
+function detectFrequency(
   buffer,
   sampleRate
 ){
@@ -1167,85 +1054,892 @@ function autoCorrelate(
   const size =
     buffer.length;
 
-  let rms = 0;
 
-  for(let i=0;i<size;i++){
+  /*
+    RMS.
+  */
 
-    rms +=
+  let sum = 0;
+
+  for(
+    let i = 0;
+    i < size;
+    i++
+  ){
+
+    sum +=
       buffer[i] *
       buffer[i];
 
   }
 
-  rms =
+
+  const rms =
     Math.sqrt(
-      rms/size
+      sum / size
     );
+
 
   if(rms < SILENCE)
     return -1;
 
-  let bestOffset = -1;
-  let bestCorrelation = 0;
 
   /*
-    Faixa aproximada de voz:
-    60 Hz até 2000 Hz.
+    Limites da busca.
+
+    Frequência menor:
+    60 Hz
+
+    Frequência maior:
+    2000 Hz
   */
 
-  const minOffset =
+  const minLag =
     Math.floor(
-      sampleRate/2000
+      sampleRate / MAX_FREQ
     );
 
-  const maxOffset =
-    Math.floor(
-      sampleRate/60
+
+  const maxLag =
+    Math.min(
+      Math.floor(
+        sampleRate / MIN_FREQ
+      ),
+      Math.floor(size / 2)
     );
+
+
+  let bestLag = -1;
+  let bestCorrelation = 0;
+
+
+  /*
+    Autocorrelação.
+
+    Esse mesmo cálculo é utilizado
+    para a taça e para a voz.
+  */
 
   for(
-    let offset=minOffset;
-    offset<Math.min(maxOffset,size/2);
-    offset++
+    let lag = minLag;
+    lag <= maxLag;
+    lag++
   ){
 
     let correlation = 0;
 
     for(
-      let i=0;
-      i<size/2;
+      let i = 0;
+      i < size / 2;
       i++
     ){
 
       correlation +=
         buffer[i] *
-        buffer[i+offset];
+        buffer[i + lag];
 
     }
 
-    correlation /=
-      size/2;
 
-    if(correlation > bestCorrelation){
+    correlation /=
+      size / 2;
+
+
+    /*
+      Normalização simples.
+    */
+
+    if(
+      correlation >
+      bestCorrelation
+    ){
 
       bestCorrelation =
         correlation;
 
-      bestOffset =
-        offset;
+      bestLag =
+        lag;
 
     }
 
   }
 
+
   if(
-    bestOffset <= 0 ||
-    bestCorrelation < .001
-  )
+    bestLag <= 0 ||
+    bestCorrelation < 0.001
+  ){
+
     return -1;
 
-  return sampleRate /
-         bestOffset;
+  }
+
+
+  let frequency =
+    sampleRate / bestLag;
+
+
+  /*
+    Pequena interpolação para
+    melhorar a frequência.
+
+    Compara os lags vizinhos.
+  */
+
+  if(
+    bestLag > minLag &&
+    bestLag < maxLag
+  ){
+
+    const c1 =
+      correlationAtLag(
+        buffer,
+        bestLag - 1
+      );
+
+    const c2 =
+      correlationAtLag(
+        buffer,
+        bestLag
+      );
+
+    const c3 =
+      correlationAtLag(
+        buffer,
+        bestLag + 1
+      );
+
+
+    const denominator =
+      c1 - 2*c2 + c3;
+
+
+    if(
+      Math.abs(denominator) >
+      0.0000001
+    ){
+
+      const offset =
+        0.5 *
+        (c1 - c3) /
+        denominator;
+
+
+      frequency =
+        sampleRate /
+        (bestLag + offset);
+
+    }
+
+  }
+
+
+  if(
+    frequency < MIN_FREQ ||
+    frequency > MAX_FREQ
+  ){
+
+    return -1;
+
+  }
+
+
+  return frequency;
+
+}
+
+
+/* =========================================================
+   CORRELAÇÃO DE UM LAG
+========================================================= */
+
+function correlationAtLag(
+  buffer,
+  lag
+){
+
+  let result = 0;
+
+  const limit =
+    Math.floor(
+      buffer.length / 2
+    );
+
+
+  for(
+    let i = 0;
+    i < limit;
+    i++
+  ){
+
+    result +=
+      buffer[i] *
+      buffer[i + lag];
+
+  }
+
+
+  return result / limit;
+
+}
+
+
+/* =========================================================
+   MEDIANA
+========================================================= */
+
+function median(values){
+
+  if(!values.length)
+    return 0;
+
+
+  const sorted =
+    [...values].sort(
+      (a,b) => a-b
+    );
+
+
+  const middle =
+    Math.floor(
+      sorted.length / 2
+    );
+
+
+  if(
+    sorted.length % 2
+  ){
+
+    return sorted[middle];
+
+  }
+
+
+  return (
+    sorted[middle-1] +
+    sorted[middle]
+  ) / 2;
+
+}
+
+
+/* =========================================================
+   FILTRO DE FREQUÊNCIAS
+========================================================= */
+
+/*
+  Remove valores muito distantes
+  da região principal.
+
+  Isso ajuda a evitar que um ruído
+  aleatório altere o resultado.
+*/
+
+function stableFrequency(samples){
+
+  if(!samples.length)
+    return 0;
+
+
+  const med =
+    median(samples);
+
+
+  const filtered =
+    samples.filter(
+      value =>
+        Math.abs(value-med) < 60
+    );
+
+
+  if(!filtered.length)
+    return med;
+
+
+  return median(filtered);
+
+}
+
+
+/* =========================================================
+   MEDIÇÃO DA TAÇA
+========================================================= */
+
+async function startGlassScan(){
+
+  currentMode = "glass";
+
+
+  const started =
+    await startMicrophone();
+
+
+  if(!started)
+    return;
+
+
+  /*
+    Cancela medição anterior.
+  */
+
+  clearInterval(
+    glassTimerInterval
+  );
+
+
+  glassRunning = true;
+
+  glassStart =
+    performance.now();
+
+
+  glassSamples = [];
+
+
+  glassHz.textContent =
+    "---";
+
+
+  glassHz.classList.remove(
+    "found"
+  );
+
+
+  glassTimer.textContent =
+    "5.0";
+
+
+  glassStatus.textContent =
+    "🎙️ Toque na taça! Medindo...";
+
+
+  savedInfo.textContent = "";
+
+
+  peaksBox.innerHTML =
+    "Procurando frequência...";
+
+
+  glassMic.disabled = true;
+
+
+  glassTimerInterval =
+    setInterval(
+      updateGlassTimer,
+      50
+    );
+
+}
+
+
+/* =========================================================
+   TIMER TAÇA
+========================================================= */
+
+function updateGlassTimer(){
+
+  if(!glassRunning)
+    return;
+
+
+  const elapsed =
+    performance.now() -
+    glassStart;
+
+
+  const remaining =
+    Math.max(
+      0,
+      DETECTION_TIME -
+      elapsed
+    );
+
+
+  glassTimer.textContent =
+    (
+      remaining / 1000
+    ).toFixed(1);
+
+
+  if(
+    remaining <= 0
+  ){
+
+    finishGlassScan();
+
+  }
+
+}
+
+
+/* =========================================================
+   FINAL DA TAÇA
+========================================================= */
+
+function finishGlassScan(){
+
+  if(!glassRunning)
+    return;
+
+
+  glassRunning = false;
+
+
+  clearInterval(
+    glassTimerInterval
+  );
+
+
+  glassTimerInterval = null;
+
+
+  glassTimer.textContent =
+    "0.0";
+
+
+  glassMic.disabled = false;
+
+
+  /*
+    Calcula a frequência final
+    usando exatamente o mesmo
+    método utilizado na voz.
+  */
+
+  const result =
+    stableFrequency(
+      glassSamples
+    );
+
+
+  if(result > 0){
+
+    glassFrequency =
+      Math.round(result);
+
+
+    /*
+      Mostra resultado.
+    */
+
+    glassHz.textContent =
+      glassFrequency;
+
+
+    glassHz.classList.add(
+      "found"
+    );
+
+
+    /*
+      IMPORTANTE:
+      a frequência da taça passa
+      automaticamente para a voz.
+    */
+
+    TARGET_FREQ =
+      glassFrequency;
+
+
+    targetDisplay.textContent =
+      glassFrequency;
+
+
+    targetInput.value =
+      glassFrequency;
+
+
+    /*
+      Salva no navegador.
+    */
+
+    localStorage.setItem(
+      "tacaFrequencia",
+      glassFrequency
+    );
+
+
+    savedInfo.textContent =
+      "✓ Frequência salva: " +
+      glassFrequency +
+      " Hz";
+
+
+    glassStatus.textContent =
+      "✅ Taça detectada: " +
+      glassFrequency +
+      " Hz";
+
+
+    /*
+      Atualiza a aba voz.
+    */
+
+    voiceStatus.textContent =
+      "🎯 Alvo recebido: " +
+      glassFrequency +
+      " Hz";
+
+
+    voiceMatch.textContent =
+      "🎯 Alvo da taça: " +
+      glassFrequency +
+      " Hz";
+
+
+    renderPeaks();
+
+  }else{
+
+    glassStatus.textContent =
+      "⚠️ Não foi possível encontrar uma frequência estável.";
+
+    glassHz.textContent =
+      "---";
+
+  }
+
+}
+
+
+/* =========================================================
+   MEDIÇÃO DA VOZ
+========================================================= */
+
+async function startVoiceScan(){
+
+  currentMode = "voice";
+
+
+  const started =
+    await startMicrophone();
+
+
+  if(!started)
+    return;
+
+
+  clearInterval(
+    voiceTimerInterval
+  );
+
+
+  voiceRunning = true;
+
+  voiceStart =
+    performance.now();
+
+
+  voiceSamples = [];
+
+
+  voiceFrequency = 0;
+
+
+  voiceHz.textContent =
+    "---";
+
+
+  voiceTimer.textContent =
+    "5.0";
+
+
+  voiceStatus.textContent =
+    "🎙️ Faça um som constante durante 5 segundos";
+
+
+  energy.style.width =
+    "0%";
+
+
+  energyText.textContent =
+    "0%";
+
+
+  voiceMatch.textContent =
+    "Analisando sua voz...";
+
+
+  voiceCracked = false;
+
+
+  crackMessage.textContent =
+    "🍷 A taça está intacta…";
+
+
+  crackMessage.style.color =
+    "#aac8ff";
+
+
+  voiceMic.disabled = true;
+
+
+  voiceTimerInterval =
+    setInterval(
+      updateVoiceTimer,
+      50
+    );
+
+}
+
+
+/* =========================================================
+   TIMER VOZ
+========================================================= */
+
+function updateVoiceTimer(){
+
+  if(!voiceRunning)
+    return;
+
+
+  const elapsed =
+    performance.now() -
+    voiceStart;
+
+
+  const remaining =
+    Math.max(
+      0,
+      DETECTION_TIME -
+      elapsed
+    );
+
+
+  voiceTimer.textContent =
+    (
+      remaining / 1000
+    ).toFixed(1);
+
+
+  if(
+    remaining <= 0
+  ){
+
+    finishVoiceScan();
+
+  }
+
+}
+
+
+/* =========================================================
+   FINAL DA VOZ
+========================================================= */
+
+function finishVoiceScan(){
+
+  if(!voiceRunning)
+    return;
+
+
+  voiceRunning = false;
+
+
+  clearInterval(
+    voiceTimerInterval
+  );
+
+
+  voiceTimerInterval = null;
+
+
+  voiceTimer.textContent =
+    "0.0";
+
+
+  voiceMic.disabled = false;
+
+
+  /*
+    Usa exatamente a mesma lógica
+    usada na taça.
+  */
+
+  const result =
+    stableFrequency(
+      voiceSamples
+    );
+
+
+  if(result > 0){
+
+    voiceFrequency =
+      result;
+
+
+    voiceHz.textContent =
+      Math.round(
+        voiceFrequency
+      );
+
+
+    updateVoiceInterface(
+      voiceFrequency
+    );
+
+
+    voiceStatus.textContent =
+      "✅ Medição concluída!";
+
+
+  }else{
+
+    voiceHz.textContent =
+      "---";
+
+
+    voiceStatus.textContent =
+      "⚠️ Não foi encontrada uma frequência estável.";
+
+    voiceMatch.textContent =
+      "Tente novamente fazendo um som contínuo.";
+
+  }
+
+}
+
+
+/* =========================================================
+   PROCESSAMENTO CONTÍNUO
+========================================================= */
+
+function analyse(){
+
+  if(
+    !micActive ||
+    !analyser
+  ){
+
+    requestAnimationFrame(
+      analyse
+    );
+
+    return;
+
+  }
+
+
+  const audio =
+    getAudioData();
+
+
+  if(!audio){
+
+    requestAnimationFrame(
+      analyse
+    );
+
+    return;
+
+  }
+
+
+  const level =
+    Math.min(
+      100,
+      audio.rms * 1500
+    );
+
+
+  /*
+    Mede a frequência usando
+    o MESMO algoritmo.
+  */
+
+  const frequency =
+    detectFrequency(
+      timeData,
+      audio.sampleRate
+    );
+
+
+  /*
+    TAÇA
+  */
+
+  if(
+    currentMode === "glass"
+  ){
+
+    glassLevel.style.width =
+      level + "%";
+
+
+    if(
+      glassRunning &&
+      frequency > 0
+    ){
+
+      glassSamples.push(
+        frequency
+      );
+
+
+      /*
+        Mostra o valor atual.
+      */
+
+      glassHz.textContent =
+        Math.round(
+          frequency
+        );
+
+
+      glassHz.classList.add(
+        "found"
+      );
+
+    }
+
+  }
+
+
+  /*
+    VOZ
+  */
+
+  if(
+    currentMode === "voice"
+  ){
+
+    voiceLevel.style.width =
+      level + "%";
+
+
+    if(
+      voiceRunning &&
+      frequency > 0
+    ){
+
+      voiceSamples.push(
+        frequency
+      );
+
+
+      /*
+        Mostra a frequência
+        em tempo real.
+      */
+
+      voiceHz.textContent =
+        Math.round(
+          frequency
+        );
+
+
+      updateVoiceInterface(
+        frequency
+      );
+
+    }
+
+  }
+
+
+  requestAnimationFrame(
+    analyse
+  );
 
 }
 
@@ -1254,59 +1948,101 @@ function autoCorrelate(
    INTERFACE DA VOZ
 ========================================================= */
 
-function updateVoice(freq){
+function updateVoiceInterface(
+  frequency
+){
 
-  voiceHz.textContent =
-    Math.round(freq);
+  if(!frequency)
+    return;
+
 
   const difference =
     Math.abs(
-      freq - TARGET_FREQ
+      frequency -
+      TARGET_FREQ
     );
+
 
   /*
-    Energia de ressonância.
+    Quanto mais próximo do alvo,
+    maior a energia.
   */
 
-  let e =
+  let value =
     1 -
-    difference /
-    200;
+    difference / 100;
 
-  e =
+
+  value =
     Math.max(
       0,
-      Math.min(1,e)
+      Math.min(
+        1,
+        value
+      )
     );
 
-  e =
-    Math.pow(e,1.5);
 
   const percent =
-    Math.round(e*100);
+    Math.round(
+      value * 100
+    );
+
 
   energy.style.width =
     percent + "%";
 
+
   energyText.textContent =
     percent + "%";
 
-  if(difference < 8){
+
+  /*
+    Status.
+  */
+
+  if(
+    difference <= 5
+  ){
 
     voiceStatus.textContent =
-      "✨ RESSONÂNCIA MÁXIMA ✨";
+      "✨ FREQUÊNCIA IGUAL À DA TAÇA! ✨";
 
-  }else if(difference < 20){
+
+    voiceMatch.textContent =
+      "🍷 Ressonância máxima — " +
+      Math.round(frequency) +
+      " Hz";
+
+
+  }else if(
+    difference <= 15
+  ){
 
     voiceStatus.textContent =
-      "🔵 Muito próximo do alvo";
+      "🔵 Muito próximo da frequência da taça";
 
-  }else if(freq < TARGET_FREQ){
+
+    voiceMatch.textContent =
+      "Quase lá! Diferença: " +
+      Math.round(difference) +
+      " Hz";
+
+
+  }else if(
+    frequency <
+    TARGET_FREQ
+  ){
 
     voiceStatus.textContent =
       "⬇️ Abaixo do alvo: " +
       TARGET_FREQ +
       " Hz";
+
+
+    voiceMatch.textContent =
+      "Aumente a frequência da sua voz";
+
 
   }else{
 
@@ -1315,21 +2051,32 @@ function updateVoice(freq){
       TARGET_FREQ +
       " Hz";
 
+
+    voiceMatch.textContent =
+      "Diminua a frequência da sua voz";
+
   }
 
+
   /*
-    Mantém a simulação visual da quebra.
+    Simulação visual da ressonância.
   */
 
-  if(e > .92 && !voiceCracked){
+  if(
+    difference <= 5
+  ){
 
-    voiceCracked = true;
+    if(!voiceCracked){
 
-    crackMessage.textContent =
-      "💔 TAÇA TRINCOU! 💔";
+      voiceCracked = true;
 
-    crackMessage.style.color =
-      "#ff7185";
+      crackMessage.textContent =
+        "💔 TAÇA TRINCOU! 💔";
+
+      crackMessage.style.color =
+        "#ff7185";
+
+    }
 
   }
 
@@ -1337,89 +2084,250 @@ function updateVoice(freq){
 
 
 /* =========================================================
-   BOTÕES
+   PICOS / AMOSTRAS DA TAÇA
 ========================================================= */
 
-micBtn.addEventListener(
+function renderPeaks(){
+
+  if(!glassSamples.length){
+
+    peaksBox.innerHTML =
+      "Nenhuma frequência detectada.";
+
+    return;
+
+  }
+
+
+  /*
+    Agrupa as frequências
+    em intervalos de 5 Hz.
+  */
+
+  const groups = {};
+
+
+  glassSamples.forEach(
+    frequency => {
+
+      const key =
+        Math.round(
+          frequency / 5
+        ) * 5;
+
+
+      if(!groups[key])
+        groups[key] = 0;
+
+
+      groups[key]++;
+
+    }
+  );
+
+
+  const sorted =
+    Object.entries(groups)
+      .sort(
+        (a,b) =>
+          Number(b[1]) -
+          Number(a[1])
+      )
+      .slice(0,12);
+
+
+  peaksBox.innerHTML =
+    sorted.map(
+      ([freq,count]) => `
+
+        <div class="peak">
+
+          <span>
+            ${freq} Hz
+          </span>
+
+          <span>
+            ${count} medições
+          </span>
+
+        </div>
+
+      `
+    ).join("");
+
+}
+
+
+/* =========================================================
+   BOTÃO TAÇA
+========================================================= */
+
+glassMic.addEventListener(
   "click",
-  startMicrophone
+  () => {
+
+    if(
+      glassRunning
+    )
+      return;
+
+
+    startGlassScan();
+
+  }
 );
 
-voiceMic.addEventListener(
-  "click",
-  startMicrophone
-);
 
+/* =========================================================
+   NOVA MEDIÇÃO
+========================================================= */
 
 newScan.addEventListener(
   "click",
   () => {
 
-    if(!micActive){
-
-      glassStatus.textContent =
-        "🎤 Ative o microfone primeiro.";
-
+    if(
+      glassRunning
+    )
       return;
 
-    }
 
-    startScan();
+    startGlassScan();
 
   }
 );
 
+
+/* =========================================================
+   BOTÃO VOZ
+========================================================= */
+
+voiceMic.addEventListener(
+  "click",
+  () => {
+
+    if(
+      voiceRunning
+    )
+      return;
+
+
+    startVoiceScan();
+
+  }
+);
+
+
+/* =========================================================
+   RESET VOZ
+========================================================= */
 
 voiceReset.addEventListener(
   "click",
   () => {
 
-    voiceFreq = 0;
-    voiceCracked = false;
+    voiceRunning = false;
 
-    voiceHz.textContent = "---";
+
+    clearInterval(
+      voiceTimerInterval
+    );
+
+
+    voiceTimerInterval =
+      null;
+
+
+    voiceSamples = [];
+
+
+    voiceFrequency = 0;
+
+
+    voiceHz.textContent =
+      "---";
+
+
+    voiceTimer.textContent =
+      "5.0";
+
 
     voiceStatus.textContent =
-      "🎙️ Faça um som constante...";
+      "Pressione o botão e faça um som constante";
 
-    energy.style.width = "0%";
 
-    energyText.textContent = "0%";
+    energy.style.width =
+      "0%";
+
+
+    energyText.textContent =
+      "0%";
+
+
+    voiceMatch.textContent =
+      "Aguardando medição...";
+
+
+    voiceCracked = false;
+
 
     crackMessage.textContent =
       "🍷 A taça está intacta…";
 
+
     crackMessage.style.color =
       "#aac8ff";
+
+
+    voiceMic.disabled = false;
 
   }
 );
 
+
+/* =========================================================
+   APLICAR FREQUÊNCIA MANUAL
+========================================================= */
 
 applyTarget.addEventListener(
   "click",
   () => {
 
     const value =
-      Number(targetInput.value);
+      Number(
+        targetInput.value
+      );
+
 
     if(
-      value >= 100 &&
-      value <= 2000
+      value < 100 ||
+      value > 2000
     ){
 
-      TARGET_FREQ = value;
+      return;
 
-      targetDisplay.textContent =
-        value;
+    }
 
-      /*
-        Atualiza imediatamente
-        a medição da voz.
-      */
 
-      if(voiceFreq > 0)
-        updateVoice(voiceFreq);
+    TARGET_FREQ =
+      value;
+
+
+    targetDisplay.textContent =
+      value;
+
+
+    /*
+      Atualiza a interface.
+    */
+
+    if(
+      voiceFrequency > 0
+    ){
+
+      updateVoiceInterface(
+        voiceFrequency
+      );
 
     }
 
@@ -1431,43 +2339,54 @@ applyTarget.addEventListener(
    CARREGAR FREQUÊNCIA SALVA
 ========================================================= */
 
-const savedFreq =
+const saved =
   Number(
     localStorage.getItem(
       "tacaFrequencia"
     )
   );
 
+
 if(
-  savedFreq >= 100 &&
-  savedFreq <= 4000
+  saved >= 100 &&
+  saved <= 2000
 ){
 
-  detectedFreq =
-    savedFreq;
+  glassFrequency =
+    saved;
+
 
   TARGET_FREQ =
-    Math.min(
-      2000,
-      savedFreq
-    );
+    saved;
+
 
   targetDisplay.textContent =
-    TARGET_FREQ;
+    saved;
+
 
   targetInput.value =
-    TARGET_FREQ;
+    saved;
+
+
+  glassHz.textContent =
+    saved;
+
+
+  glassHz.classList.add(
+    "found"
+  );
+
 
   savedInfo.textContent =
     "✓ Frequência salva anteriormente: " +
-    savedFreq +
+    saved +
     " Hz";
 
 }
 
 
 /* =========================================================
-   CANVAS TAÇA
+   DESENHO DO GRÁFICO DA TAÇA
 ========================================================= */
 
 function drawGlass(){
@@ -1478,52 +2397,81 @@ function drawGlass(){
   const h =
     glassCanvas.height;
 
+
   glassCtx.fillStyle =
     "#080d15";
 
+
   glassCtx.fillRect(
-    0,0,w,h
+    0,
+    0,
+    w,
+    h
   );
+
+
+  /*
+    Linha central.
+  */
 
   glassCtx.strokeStyle =
     "#1e2d44";
 
+
+  glassCtx.lineWidth =
+    1;
+
+
   glassCtx.beginPath();
 
   glassCtx.moveTo(
-    0,h/2
+    0,
+    h/2
   );
 
   glassCtx.lineTo(
-    w,h/2
+    w,
+    h/2
   );
 
   glassCtx.stroke();
 
+
+  /*
+    Espectro.
+  */
+
   if(freqData){
 
-    const bars = 140;
+    const bars = 160;
+
 
     const step =
-      Math.floor(
-        freqData.length /
-        bars
+      Math.max(
+        1,
+        Math.floor(
+          freqData.length /
+          bars
+        )
       );
 
+
     const bw =
-      w/bars;
+      w / bars;
+
 
     for(
-      let i=0;
-      i<bars;
+      let i = 0;
+      i < bars;
       i++
     ){
 
       let value = 0;
 
+
       for(
-        let j=0;
-        j<step;
+        let j = 0;
+        j < step;
         j++
       ){
 
@@ -1531,23 +2479,28 @@ function drawGlass(){
           Math.max(
             value,
             freqData[
-              i*step+j
+              i * step + j
             ] || 0
           );
 
       }
 
+
       const barHeight =
-        value/255*
-        h*.8;
+        value /
+        255 *
+        h *
+        .8;
+
 
       glassCtx.fillStyle =
         "#27658a";
 
+
       glassCtx.fillRect(
-        i*bw,
-        h-barHeight,
-        bw-1,
+        i * bw,
+        h - barHeight,
+        bw - 1,
         barHeight
       );
 
@@ -1555,55 +2508,86 @@ function drawGlass(){
 
   }
 
-  if(bestFreq > 0 && audioContext){
+
+  /*
+    Marca a frequência detectada.
+  */
+
+  if(
+    glassFrequency > 0 &&
+    audioContext
+  ){
 
     const x =
-      bestFreq /
-      (audioContext.sampleRate/2) *
+      glassFrequency /
+      (audioContext.sampleRate / 2) *
       w;
 
-    glassCtx.strokeStyle =
-      "#ffb86b";
 
-    glassCtx.lineWidth = 3;
+    if(
+      x >= 0 &&
+      x <= w
+    ){
 
-    glassCtx.beginPath();
+      glassCtx.strokeStyle =
+        "#ffb86b";
 
-    glassCtx.moveTo(
-      x,0
-    );
 
-    glassCtx.lineTo(
-      x,h
-    );
+      glassCtx.lineWidth =
+        3;
 
-    glassCtx.stroke();
+
+      glassCtx.beginPath();
+
+      glassCtx.moveTo(
+        x,
+        0
+      );
+
+      glassCtx.lineTo(
+        x,
+        h
+      );
+
+      glassCtx.stroke();
+
+    }
 
   }
+
 
   glassCtx.fillStyle =
     "#64d8ff";
 
+
   glassCtx.font =
     "bold 16px monospace";
 
+
   glassCtx.fillText(
-    "ESPECTRO",
-    20,30
+    "ESPECTRO DA TAÇA",
+    20,
+    30
   );
 
-  if(bestFreq > 0){
+
+  if(
+    glassFrequency > 0
+  ){
 
     glassCtx.fillStyle =
       "#ffb86b";
 
+
     glassCtx.fillText(
-      Math.round(bestFreq) +
+      glassFrequency +
       " Hz",
-      20,55
+      20,
+      55
     );
 
   }
+
 
   requestAnimationFrame(
     drawGlass
@@ -1613,7 +2597,7 @@ function drawGlass(){
 
 
 /* =========================================================
-   CANVAS VOZ
+   DESENHO DA VOZ
 ========================================================= */
 
 function drawVoice(){
@@ -1624,155 +2608,245 @@ function drawVoice(){
   const h =
     voiceCanvas.height;
 
+
   voiceCtx.fillStyle =
     "#080d15";
 
+
   voiceCtx.fillRect(
-    0,0,w,h
+    0,
+    0,
+    w,
+    h
   );
+
+
+  /*
+    Linha central.
+  */
 
   voiceCtx.strokeStyle =
     "#1e2d44";
 
+
+  voiceCtx.lineWidth =
+    1;
+
+
   voiceCtx.beginPath();
 
   voiceCtx.moveTo(
-    0,h/2
+    0,
+    h/2
   );
 
   voiceCtx.lineTo(
-    w,h/2
+    w,
+    h/2
   );
 
   voiceCtx.stroke();
 
-  const target =
-    TARGET_FREQ;
-
-  const voice =
-    voiceFreq ||
-    target;
-
-  const cycles =
-    5;
 
   /*
-    Onda alvo
+    Onda do alvo.
   */
 
   voiceCtx.strokeStyle =
     "#ffb86b";
 
-  voiceCtx.lineWidth = 3;
+
+  voiceCtx.lineWidth =
+    3;
+
 
   voiceCtx.beginPath();
 
+
+  const targetCycles = 6;
+
+
   for(
-    let x=0;
-    x<w;
+    let x = 0;
+    x < w;
     x++
   ){
 
     const phase =
-      x/w*
-      cycles*
-      Math.PI*2;
+      x /
+      w *
+      targetCycles *
+      Math.PI *
+      2;
+
 
     const y =
       h/2 +
-      Math.sin(phase)*
+      Math.sin(phase) *
       100;
 
-    if(x===0)
-      voiceCtx.moveTo(x,y);
-    else
-      voiceCtx.lineTo(x,y);
+
+    if(x === 0){
+
+      voiceCtx.moveTo(
+        x,
+        y
+      );
+
+    }else{
+
+      voiceCtx.lineTo(
+        x,
+        y
+      );
+
+    }
 
   }
 
+
   voiceCtx.stroke();
 
+
   /*
-    Onda da voz
+    Onda da voz.
+
+    A frequência usada aqui
+    é a mesma detectada pelo
+    algoritmo da taça.
   */
 
-  if(voiceFreq > 0){
+  if(
+    voiceFrequency > 0
+  ){
 
     voiceCtx.strokeStyle =
       "#64d8ff";
 
+
+    voiceCtx.lineWidth =
+      3;
+
+
     voiceCtx.beginPath();
 
+
+    const ratio =
+      voiceFrequency /
+      TARGET_FREQ;
+
+
     for(
-      let x=0;
-      x<w;
+      let x = 0;
+      x < w;
       x++
     ){
 
       const phase =
-        x/w*
-        cycles*
-        Math.PI*2*
-        (voice/target);
+        x /
+        w *
+        targetCycles *
+        Math.PI *
+        2 *
+        ratio;
+
 
       const y =
         h/2 +
-        Math.sin(phase)*
+        Math.sin(phase) *
         80;
 
-      if(x===0)
-        voiceCtx.moveTo(x,y);
-      else
-        voiceCtx.lineTo(x,y);
+
+      if(x === 0){
+
+        voiceCtx.moveTo(
+          x,
+          y
+        );
+
+      }else{
+
+        voiceCtx.lineTo(
+          x,
+          y
+        );
+
+      }
 
     }
+
 
     voiceCtx.stroke();
 
   }
 
+
+  /*
+    Texto da voz.
+  */
+
   voiceCtx.fillStyle =
     "#64d8ff";
+
 
   voiceCtx.font =
     "bold 16px monospace";
 
+
   voiceCtx.fillText(
     "VOZ: " +
     (
-      voiceFreq
-        ? Math.round(voiceFreq)
+      voiceFrequency
+        ? Math.round(
+            voiceFrequency
+          )
         : "---"
     ) +
     " Hz",
-    20,30
+    20,
+    30
   );
+
+
+  /*
+    Texto do alvo.
+  */
 
   voiceCtx.fillStyle =
     "#ffb86b";
+
 
   voiceCtx.fillText(
     "ALVO: " +
     TARGET_FREQ +
     " Hz",
-    20,55
+    20,
+    55
   );
+
+
+  /*
+    Mensagem de ressonância.
+  */
 
   if(voiceCracked){
 
     voiceCtx.fillStyle =
       "#ff4d6d";
 
+
     voiceCtx.font =
       "bold 26px sans-serif";
 
+
     voiceCtx.fillText(
       "💔 TAÇA TRINCADA",
-      w/2-120,
+      w/2 - 125,
       h/2
     );
 
   }
+
 
   requestAnimationFrame(
     drawVoice
@@ -1782,11 +2856,21 @@ function drawVoice(){
 
 
 /* =========================================================
-   INICIAR DESENHOS
+   INICIAR GRÁFICOS
 ========================================================= */
 
 drawGlass();
+
 drawVoice();
+
+
+/* =========================================================
+   LOOP DE ÁUDIO
+========================================================= */
+
+requestAnimationFrame(
+  analyse
+);
 
 
 /* =========================================================
@@ -1802,7 +2886,8 @@ window.addEventListener(
       stream
         .getTracks()
         .forEach(
-          t => t.stop()
+          track =>
+            track.stop()
         );
 
     }
